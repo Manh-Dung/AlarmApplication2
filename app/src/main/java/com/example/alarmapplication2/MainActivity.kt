@@ -12,7 +12,6 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.AlarmManagerCompat
 import com.example.alarmapplication2.databinding.ActivityMainBinding
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -31,12 +30,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         createNotificationChannel()
+
         binding.selectTimeBtn.setOnClickListener {
             showTimePicker()
         }
 
         binding.setTimeBtn.setOnClickListener {
-            setAlarm()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                setAlarm()
+            }
         }
 
         binding.cancelTimeBtn.setOnClickListener {
@@ -46,10 +48,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name: CharSequence = "foxAndroidReminderChannel"
+            val name: CharSequence = "Alarm"
             val description = "Channel For Android Manager"
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("alarm", name, importance)
+            val channel = NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID, name, importance)
 
             channel.description = description
 
@@ -69,20 +71,20 @@ class MainActivity : AppCompatActivity() {
             .setTitleText("Select Alarm Time")
             .build()
 
-        picker.show(supportFragmentManager, "alarm")
+        picker.show(supportFragmentManager, Constants.NOTIFICATION_CHANNEL_ID)
 
         picker.addOnPositiveButtonClickListener {
-            if (picker.hour > 12) {
+            if (picker.hour >= 12) {
                 binding.selectedTime.text =
                     String.format("%02d", picker.hour - 12) + " : " + String.format(
                         "%02d", picker.minute
-                    ) + "PM"
+                    ) + " PM"
             } else {
-                if (picker.hour > 12) {
+                if (picker.hour < 12) {
                     binding.selectedTime.text =
                         String.format("%02d", picker.hour) + " : " + String.format(
                             "%02d", picker.minute
-                        ) + "AM"
+                        ) + " AM"
                 }
             }
 
@@ -94,12 +96,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun setAlarm() {
         alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java)
+
         pendingIntent =
-            PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getBroadcast(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
         if (!alarmManager.canScheduleExactAlarms()) {
             val intentTmp = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
@@ -124,11 +131,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun cancelAlarm() {
         alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, AlarmReceiver::class.java)
+        val intent = Intent(applicationContext, AlarmReceiver::class.java)
+
         pendingIntent =
-            PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getBroadcast(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
         alarmManager.cancel(pendingIntent)
         Toast.makeText(this, "Alarm cancelled", Toast.LENGTH_LONG).show()
     }
+
 }
