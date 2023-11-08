@@ -24,6 +24,12 @@ class AlarmReceiver : BroadcastReceiver() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context?, intent: Intent?) {
+        val serviceIntent = Intent(context, AlarmService::class.java)
+        serviceIntent.action = Constants.ACTION.START_FOREGROUND_ACTION
+        context?.startForegroundService(serviceIntent)
+
+
+
 //        val i = Intent(context, MainActivity::class.java)
 //        intent!!.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 //
@@ -34,12 +40,6 @@ class AlarmReceiver : BroadcastReceiver() {
 //                i,
 //                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
 //            )
-        Log.v("caksckaskc", "receiver1")
-        val serviceIntent = Intent(context, AlarmService::class.java)
-        serviceIntent.action = Constants.ACTION.START_FOREGROUND_ACTION
-        context?.startForegroundService(serviceIntent)
-        Log.v("caksckaskc", "receiver2")
-
 
 //        val dismissIntent = Intent(context, DismissReceiver::class.java)
 //        val dismissPendingIntent: PendingIntent =

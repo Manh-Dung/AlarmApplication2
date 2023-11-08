@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -53,7 +54,13 @@ class MainActivity : AppCompatActivity() {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID, name, importance)
 
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build()
+            val uri = Uri.parse("android.resource://${applicationContext.packageName}/${R.raw.victory}")
+
             channel.description = description
+            channel.setSound(uri, audioAttributes)
 
             val notificationManager = getSystemService(
                 NotificationManager::class.java
@@ -96,6 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun setAlarm() {
         alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java)

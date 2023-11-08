@@ -6,20 +6,23 @@ import android.content.Context
 import android.content.Intent
 import android.app.PendingIntent
 import android.widget.Toast
+import java.util.Timer
+import java.util.TimerTask
 
 class SnoozeReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent =
-            PendingIntent.getBroadcast(
-                context,
-                2,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
+        val serviceIntent = Intent(context, AlarmService::class.java)
+        serviceIntent.action = Constants.ACTION.STOP_FOREGROUND_ACTION
+        context?.stopService(serviceIntent)
 
-        alarmManager.cancel(pendingIntent)
+        val startRingtone = Timer()
+        startRingtone.schedule(object : TimerTask() {
+            override fun run() {
+                val serviceIntent = Intent(context, AlarmService::class.java)
+                serviceIntent.action = Constants.ACTION.START_FOREGROUND_ACTION
+                context?.startForegroundService(serviceIntent)
+            }
+        }, 60000)
 
         Toast.makeText(context, "Alarm snoozed for 1 minutes", Toast.LENGTH_SHORT).show()
     }
