@@ -1,36 +1,56 @@
-package com.example.alarmapplication2
+package com.example.alarmapplication2.fragment
 
 import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.alarmapplication2.databinding.ActivityMainBinding
+import androidx.fragment.app.Fragment
+import com.example.alarmapplication2.databinding.FragmentAlarmBinding
+import com.example.alarmapplication2.receiver.AlarmReceiver
+import com.example.alarmapplication2.receiver.Constants
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.util.Calendar
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class AlarmFragment : Fragment() {
+    private var _binding: FragmentAlarmBinding? = null
+    private val binding
+        get() = _binding!!
+
     private lateinit var picker: MaterialTimePicker
     private lateinit var calendar: Calendar
     private lateinit var alarmManager: AlarmManager
     private lateinit var pendingIntent: PendingIntent
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    companion object {
+        @JvmStatic
+        fun newInstance() =
+            AlarmFragment().apply {
+                arguments = Bundle().apply {
+                }
+            }
+    }
 
-        createNotificationChannel()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentAlarmBinding.inflate(inflater, container, false)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.selectTimeBtn.setOnClickListener {
             showTimePicker()
@@ -47,29 +67,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name: CharSequence = "Alarm"
-            val description = "Channel For Android Manager"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID, name, importance)
-
-            val audioAttributes = AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                .build()
-            val uri = Uri.parse("android.resource://${applicationContext.packageName}/${R.raw.victory}")
-
-            channel.description = description
-            channel.setSound(uri, audioAttributes)
-
-            val notificationManager = getSystemService(
-                NotificationManager::class.java
-            )
-
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
     private fun showTimePicker() {
         picker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
@@ -78,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             .setTitleText("Select Alarm Time")
             .build()
 
-        picker.show(supportFragmentManager, Constants.NOTIFICATION_CHANNEL_ID)
+        picker.show(childFragmentManager, Constants.NOTIFICATION_CHANNEL_ID)
 
         picker.addOnPositiveButtonClickListener {
             if (picker.hour >= 12) {
@@ -105,12 +102,13 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun setAlarm() {
-        alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, AlarmReceiver::class.java)
+        alarmManager =
+            requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireActivity(), AlarmReceiver::class.java)
 
         pendingIntent =
             PendingIntent.getBroadcast(
-                this,
+                requireActivity(),
                 0,
                 intent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -133,24 +131,25 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Alarm set Successfully", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun cancelAlarm() {
-        alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(applicationContext, AlarmReceiver::class.java)
+        alarmManager =
+            requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireActivity(), AlarmReceiver::class.java)
 
         pendingIntent =
             PendingIntent.getBroadcast(
-                this,
+                requireActivity(),
                 0,
                 intent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
         alarmManager.cancel(pendingIntent)
-        Toast.makeText(this, "Alarm cancelled", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Alarm cancelled", Toast.LENGTH_LONG).show()
     }
 
 }

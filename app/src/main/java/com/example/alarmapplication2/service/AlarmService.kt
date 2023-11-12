@@ -1,13 +1,14 @@
-package com.example.alarmapplication2
+package com.example.alarmapplication2.service
 
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import java.util.Timer
-import java.util.TimerTask
+import com.example.alarmapplication2.R
+import com.example.alarmapplication2.receiver.Constants
+import com.example.alarmapplication2.receiver.DismissReceiver
+import com.example.alarmapplication2.receiver.SnoozeReceiver
 
 class AlarmService : Service() {
     private val NOTIFICATION_ID = 1

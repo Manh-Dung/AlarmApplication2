@@ -1,9 +1,10 @@
-package com.example.alarmapplication2
+package com.example.alarmapplication2.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import com.example.alarmapplication2.service.AlarmService
 
 class DismissReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

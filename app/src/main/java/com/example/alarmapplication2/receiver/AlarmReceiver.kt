@@ -1,22 +1,11 @@
-package com.example.alarmapplication2
+package com.example.alarmapplication2.receiver
 
-import android.Manifest
-import android.app.Activity
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import java.util.Timer
-import java.util.TimerTask
+import com.example.alarmapplication2.service.AlarmService
 
 
 class AlarmReceiver : BroadcastReceiver() {
