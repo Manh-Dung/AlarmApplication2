@@ -1,46 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".fragment.AlarmFragment">
 
-    <TextView
-        android:id="@+id/selectedTime"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:text="08 : 45 PM"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="46sp" />
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="45dp"
+        android:paddingBottom="170dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/selectTimeBtn"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAlarm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addAlarmBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/gray_icon"
+        android:elevation="5dp"
+        android:src="@drawable/add_ic"
+        android:tint="@color/blue_icon"
+        app:layout_constraintBottom_toTopOf="@+id/bottomDelete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:maxImageSize="30dp" />
+
+    <FrameLayout
+        android:id="@+id/bottomDelete"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="26dp"
-        android:layout_marginTop="36dp"
-        android:text="Select Time"
-        android:textSize="26sp" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/bottom_sheet_dialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
-        android:id="@+id/setTimeBtn"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="26dp"
-        android:layout_marginTop="8dp"
-        android:text="Set Alarm"
-        android:textSize="26sp" />
+        <TextView
+            android:id="@+id/deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="17dp"
+            android:drawableTop="@drawable/delete_ic"
+            android:padding="2sp"
+            android:text="Xóa"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/cancelTimeBtn"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="26dp"
-        android:layout_marginTop="8dp"
-        android:text="Cancel Alarm"
-        android:textSize="26sp" />
+    </FrameLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

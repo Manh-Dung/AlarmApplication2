@@ -4,21 +4,21 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.alarmapplication2.domain.Clock
+import com.example.alarmapplication2.domain.Alarm
 
-@Database(entities = [Clock::class], version = 1, exportSchema = false)
-abstract class ClockDatabase : RoomDatabase() {
-    abstract fun clockDAO() : ClockDAO
+@Database(entities = [Alarm::class], version = 2, exportSchema = false)
+abstract class AlarmDatabase : RoomDatabase() {
+    abstract fun clockDAO() : AlarmDAO
 
     companion object {
         @Volatile
-        var INSTANCE: ClockDatabase? = null
+        var INSTANCE: AlarmDatabase? = null
 
-        fun getDatabase(context: Context): ClockDatabase {
+        fun getDatabase(context: Context): AlarmDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context,
-                    ClockDatabase::class.java,
+                    AlarmDatabase::class.java,
                     "clock.db"
                 )
                     .fallbackToDestructiveMigration()

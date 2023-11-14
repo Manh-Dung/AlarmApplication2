@@ -4,4 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_icon">#2382f6</color>
     <color name="gray_icon">#676767</color>
+    <color name="item_bg">#242424</color> 
+    <color name="times">#454545</color>
+    <color name="switch_btn">#515151</color>
+    <color name="bottom_bg">#101010</color>
 </resources>

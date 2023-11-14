@@ -7,12 +7,21 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/blue_icon</item>
-        <item name="colorSecondaryVariant">@color/black</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
 
     </style>
+
     <style name="Theme.AlarmApplication2" parent="Base.Theme.AlarmApplication2" />
 
+    <style name="CustomSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color -->
+        <item name="colorControlActivated">@color/blue_icon</item>
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/white</item>
+        <!-- inactive track color -->
+        <item name="android:colorForeground">@color/switch_btn</item>
+    </style>
 </resources>

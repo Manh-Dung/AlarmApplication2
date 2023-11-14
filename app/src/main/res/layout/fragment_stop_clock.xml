@@ -1,46 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/black"
     tools:context=".fragment.StopClockFragment">
 
     <TextView
-        android:id="@+id/selectedTime"
-        android:layout_width="match_parent"
+        android:id="@+id/stopClockTxt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
-        android:text="08 : 45 PM"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="46sp" />
+        android:text="00:00.00"
+        android:textColor="@color/white"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/selectTimeBtn"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="26dp"
-        android:layout_marginTop="36dp"
-        android:text="Select Time"
-        android:textSize="26sp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/playStopClockBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:backgroundTint="@color/item_bg"
+        android:src="@drawable/play_ic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/stopClockTxt"
+        app:layout_constraintStart_toStartOf="@+id/stopClockTxt" />
 
-    <Button
-        android:id="@+id/setTimeBtn"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="26dp"
-        android:layout_marginTop="8dp"
-        android:text="Set Alarm"
-        android:textSize="26sp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/flagStopClockBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:visibility="gone"
+        android:layout_marginBottom="70dp"
+        android:backgroundTint="@color/item_bg"
+        android:src="@drawable/flag_ic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/playStopClockBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/playStopClockBtn" />
 
-    <Button
-        android:id="@+id/cancelTimeBtn"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="26dp"
-        android:layout_marginTop="8dp"
-        android:text="Cancel Alarm"
-        android:textSize="26sp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pauseStopClockBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="70dp"
+        android:visibility="gone"
+        android:layout_marginBottom="70dp"
+        android:backgroundTint="@color/item_bg"
+        android:src="@drawable/pause_ic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playStopClockBtn"
+        app:layout_constraintTop_toTopOf="@+id/playStopClockBtn" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Build
 import com.example.alarmapplication2.receiver.Constants
 
-class MyApplication: Application() {
+class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
@@ -24,7 +24,8 @@ class MyApplication: Application() {
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                 .build()
-            val uri = Uri.parse("android.resource://${applicationContext.packageName}/${R.raw.victory}")
+            val uri =
+                Uri.parse("android.resource://${applicationContext.packageName}/${R.raw.victory}")
 
             channel.description = description
             channel.setSound(uri, audioAttributes)
