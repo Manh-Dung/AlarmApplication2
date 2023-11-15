@@ -3,6 +3,7 @@ package com.example.alarmapplication2.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
@@ -16,11 +17,13 @@ class AlarmAdapter(
     private val onItemCheckedChangeListener: (Alarm) -> Unit
 ) :
     RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
+
     class AlarmViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val alarmTimeTxt: TextView = itemView.findViewById(R.id.alarmTimeTxt)
         val repeatTxt: TextView = itemView.findViewById(R.id.repeatTxt)
         val enableAlarmBtn: SwitchCompat = itemView.findViewById(R.id.enableAlarmBtn)
         val alarmLayout: CardView = itemView.findViewById(R.id.alarmLayout)
+        val checkDeleteBtn: CheckBox = itemView.findViewById(R.id.checkDeleteBtn)
     }
 
     private var alarmList = emptyList<Alarm>()
@@ -58,9 +61,14 @@ class AlarmAdapter(
         }
 
         holder.alarmLayout.setOnLongClickListener {
+            holder.checkDeleteBtn.visibility = View.VISIBLE
+            holder.enableAlarmBtn.visibility = View.GONE
+            notifyDataSetChanged()
             onItemLongClickListener(alarm)
             true
         }
+
+        alarm.deleteCheck = holder.checkDeleteBtn.isChecked
     }
 
     override fun getItemCount(): Int {

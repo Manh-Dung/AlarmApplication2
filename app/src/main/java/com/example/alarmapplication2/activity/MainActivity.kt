@@ -1,7 +1,5 @@
 package com.example.alarmapplication2.activity
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.os.Build
@@ -10,30 +8,19 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.alarmapplication2.R
 import com.example.alarmapplication2.adapter.ViewPagerAdapter
 import com.example.alarmapplication2.databinding.ActivityMainBinding
-import com.example.alarmapplication2.fragment.AlarmFragment
-import com.example.alarmapplication2.fragment.ClockFragment
-import com.example.alarmapplication2.fragment.CountDownClockFragment
-import com.example.alarmapplication2.fragment.StopClockFragment
+import com.example.alarmapplication2.viewmodel.ActFragViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.timepicker.MaterialTimePicker
-import java.util.Calendar
 
-class MainActivity : AppCompatActivity(), AlarmFragment.OnButtonPressListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val fragments = listOf(
-        AlarmFragment(),
-        ClockFragment(),
-        StopClockFragment(),
-        CountDownClockFragment()
-    )
 
-    fun getFragment(position: Int): Fragment {
-        return fragments[position]
+    private val actFragViewModel: ActFragViewModel by lazy {
+        ViewModelProvider(this)[ActFragViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,24 +56,24 @@ class MainActivity : AppCompatActivity(), AlarmFragment.OnButtonPressListener {
             }
         })
 
-        binding.closeDeleteBtn.setOnClickListener{
+        binding.closeDeleteBtn.setOnClickListener {
             binding.deleteSelectLayout.visibility = View.GONE
+            binding.tabLayout.visibility = View.VISIBLE
+
+            actFragViewModel.setDeleteLayoutOn(false)
         }
 
         binding.checkAllBtn.setOnClickListener {
-            // Mai dung viewModel
-            onActivityCommand(true)
         }
 
-
-
-    }
-
-    override fun onButtonPressed(msg: String) {
-
-    }
-
-    override fun onActivityCommand(deleteCheck: Boolean) {
-
+        actFragViewModel.deleteLayoutOn.observe(this) {
+            if (it) {
+                binding.deleteSelectLayout.visibility = View.VISIBLE
+                binding.tabLayout.visibility = View.GONE
+            } else {
+                binding.deleteSelectLayout.visibility = View.GONE
+                binding.tabLayout.visibility = View.VISIBLE
+            }
+        }
     }
 }

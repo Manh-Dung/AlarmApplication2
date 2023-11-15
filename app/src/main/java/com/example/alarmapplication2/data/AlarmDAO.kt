@@ -19,7 +19,7 @@ interface AlarmDAO {
     @Delete
     suspend fun deleteAlarm(alarm: Alarm?)
 
-    @Query("DELETE FROM Alarm WHERE deleteCheck = :true")
+    @Query("DELETE FROM Alarm WHERE deleteCheck = true")
     suspend fun deleteCheckedAlarms()
 
     @Query("SELECT * FROM Alarm ORDER BY id DESC")

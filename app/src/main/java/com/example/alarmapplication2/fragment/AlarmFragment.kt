@@ -22,18 +22,13 @@ import com.example.alarmapplication2.databinding.FragmentAlarmBinding
 import com.example.alarmapplication2.domain.Alarm
 import com.example.alarmapplication2.receiver.AlarmReceiver
 import com.example.alarmapplication2.receiver.Constants
+import com.example.alarmapplication2.viewmodel.ActFragViewModel
 import com.example.alarmapplication2.viewmodel.AlarmViewModel
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.util.Calendar
 
 class AlarmFragment : Fragment() {
-    interface OnButtonPressListener {
-        fun onButtonPressed(msg: String)
-        fun onActivityCommand(deleteCheck: Boolean)
-    }
-    private var onButtonPressListener: OnButtonPressListener? = null
-
     private var _binding: FragmentAlarmBinding? = null
     private val binding
         get() = _binding!!
@@ -45,6 +40,10 @@ class AlarmFragment : Fragment() {
 
     private val alarmViewModel: AlarmViewModel by lazy {
         ViewModelProvider(requireActivity())[AlarmViewModel::class.java]
+    }
+
+    private val actFragViewModel: ActFragViewModel by lazy {
+        ViewModelProvider(requireActivity())[ActFragViewModel::class.java]
     }
 
     companion object {
@@ -76,14 +75,15 @@ class AlarmFragment : Fragment() {
                 showTimePicker()
             }
         }
-    }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnButtonPressListener) {
-            onButtonPressListener = context
-        } else {
-            throw ClassCastException("$context must implement OnButtonPressListener")
+        actFragViewModel.deleteLayoutOn.observe(requireActivity()){
+            if (it) {
+                binding.addAlarmBtn.visibility = View.GONE
+                binding.bottomDelete.visibility = View.VISIBLE
+            } else {
+                binding.addAlarmBtn.visibility = View.VISIBLE
+                binding.bottomDelete.visibility = View.GONE
+            }
         }
     }
 
@@ -93,6 +93,7 @@ class AlarmFragment : Fragment() {
                 updateAlarm(alarm)
             },
             onItemLongClickListener = { alarm ->
+                actFragViewModel.setDeleteLayoutOn(true)
                 deleteAlarm(alarm)
             },
             onItemCheckedChangeListener = { alarm ->
@@ -101,7 +102,7 @@ class AlarmFragment : Fragment() {
                         setAlarm(alarm)
                     }
                 } else {
-                    cancelAlarm()
+                    cancelAlarm(alarm)
                 }
             }
         )
@@ -143,6 +144,8 @@ class AlarmFragment : Fragment() {
 
             binding.addAlarmBtn.visibility = View.VISIBLE
             binding.bottomDelete.visibility = View.GONE
+
+            actFragViewModel.setDeleteLayoutOn(false)
         }
     }
 
@@ -198,11 +201,12 @@ class AlarmFragment : Fragment() {
         alarmManager =
             requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
         val intent = Intent(requireActivity(), AlarmReceiver::class.java)
+        intent.putExtra("alarm_id", alarm.id)
 
         pendingIntent =
             PendingIntent.getBroadcast(
                 requireActivity(),
-                0,
+                alarm.id!!.toInt(),
                 intent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -227,7 +231,7 @@ class AlarmFragment : Fragment() {
         }
     }
 
-    private fun cancelAlarm() {
+    private fun cancelAlarm(alarm: Alarm) {
         alarmManager =
             requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
         val intent = Intent(requireActivity(), AlarmReceiver::class.java)
@@ -235,7 +239,7 @@ class AlarmFragment : Fragment() {
         pendingIntent =
             PendingIntent.getBroadcast(
                 requireActivity(),
-                0,
+                alarm.id!!.toInt(),
                 intent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )

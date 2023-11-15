@@ -14,10 +14,11 @@ class AlarmService : Service() {
     private val NOTIFICATION_ID = 1
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val alarmId = intent.getIntExtra("alarm_id", -1)
         val dismissIntent = Intent(this, DismissReceiver::class.java)
         val dismissPendingIntent: PendingIntent = PendingIntent.getBroadcast(
             this,
-            0,
+            alarmId,
             dismissIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -25,7 +26,7 @@ class AlarmService : Service() {
         val snoozeIntent = Intent(this, SnoozeReceiver::class.java)
         val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(
             this,
-            0,
+            alarmId,
             snoozeIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -38,8 +39,8 @@ class AlarmService : Service() {
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_VIBRATE or NotificationCompat.DEFAULT_LIGHTS)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .addAction(0, "Dismiss", dismissPendingIntent)
-                .addAction(0, "Snooze", snoozePendingIntent)
+                .addAction(R.drawable.alarm_off, "Dismiss", dismissPendingIntent)
+                .addAction(R.drawable.alarm_pause, "Snooze", snoozePendingIntent)
                 .build()
 
         when (intent.action) {

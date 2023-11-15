@@ -9,12 +9,13 @@ import com.example.alarmapplication2.service.AlarmService
 
 
 class AlarmReceiver : BroadcastReceiver() {
-    private val REQUEST_CODE_POST_NOTIFICATIONS = 1
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context?, intent: Intent?) {
+        val alarmId = intent?.getIntExtra("alarm_id", -1)
         val serviceIntent = Intent(context, AlarmService::class.java)
         serviceIntent.action = Constants.ACTION.START_FOREGROUND_ACTION
+        serviceIntent.putExtra("alarm_id", alarmId)
         context?.startForegroundService(serviceIntent)
 
 

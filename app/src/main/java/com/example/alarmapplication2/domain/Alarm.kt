@@ -11,6 +11,6 @@ data class Alarm (
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
     var time: String,
-    var isEnable: Boolean
+    var isEnable: Boolean,
     var deleteCheck: Boolean
 ) : Parcelable
