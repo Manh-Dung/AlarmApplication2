@@ -104,7 +104,9 @@ class AlarmFragment : Fragment() {
                 } else {
                     cancelAlarm(alarm)
                 }
-            }
+            },
+            actFragViewModel,
+            requireActivity()
         )
 
         binding.recyclerViewAlarm.setHasFixedSize(true)
