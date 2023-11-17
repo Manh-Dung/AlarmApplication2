@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="70dp"
         android:backgroundTint="@color/gray_icon"
         android:elevation="5dp"
         android:src="@drawable/add_ic"
@@ -42,8 +42,8 @@
         android:id="@+id/bottomDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:background="@drawable/bottom_sheet_dialog"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

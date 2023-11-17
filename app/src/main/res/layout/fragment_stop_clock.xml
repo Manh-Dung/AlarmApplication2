@@ -20,6 +20,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stopClockTxt">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/stopClockRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/playStopClockBtn"
         android:layout_width="wrap_content"
@@ -29,35 +43,34 @@
         android:src="@drawable/play_ic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/stopClockTxt"
-        app:layout_constraintStart_toStartOf="@+id/stopClockTxt" />
+        app:layout_constraintStart_toStartOf="@+id/stopClockTxt"
+        app:maxImageSize="30dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/flagStopClockBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:visibility="gone"
+        android:layout_marginStart="80dp"
         android:layout_marginBottom="70dp"
         android:backgroundTint="@color/item_bg"
         android:src="@drawable/flag_ic"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/playStopClockBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/playStopClockBtn" />
+        app:maxImageSize="30dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pauseStopClockBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="70dp"
-        android:visibility="gone"
+        android:layout_marginEnd="80dp"
         android:layout_marginBottom="70dp"
         android:backgroundTint="@color/item_bg"
         android:src="@drawable/pause_ic"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playStopClockBtn"
-        app:layout_constraintTop_toTopOf="@+id/playStopClockBtn" />
+        app:maxImageSize="30dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

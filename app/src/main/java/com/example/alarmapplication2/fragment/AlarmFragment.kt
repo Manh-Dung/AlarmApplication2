@@ -2,7 +2,6 @@ package com.example.alarmapplication2.fragment
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -46,15 +45,6 @@ class AlarmFragment : Fragment() {
         ViewModelProvider(requireActivity())[ActFragViewModel::class.java]
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            AlarmFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,7 +66,7 @@ class AlarmFragment : Fragment() {
             }
         }
 
-        actFragViewModel.deleteLayoutOn.observe(requireActivity()){
+        actFragViewModel.deleteLayoutOn.observe(requireActivity()) {
             if (it) {
                 binding.addAlarmBtn.visibility = View.GONE
                 binding.bottomDelete.visibility = View.VISIBLE
@@ -96,13 +86,27 @@ class AlarmFragment : Fragment() {
                 actFragViewModel.setDeleteLayoutOn(true)
                 deleteAlarm(alarm)
             },
-            onItemCheckedChangeListener = { alarm ->
-                if (alarm.isEnable) {
+            onSwitchCheckedChangeListener = { alarm, isChecked ->
+                if (isChecked) {
+                    alarm.isEnable = true
+                    alarmViewModel.updateAlarm(alarm)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         setAlarm(alarm)
                     }
                 } else {
+                    alarm.isEnable = false
+                    alarmViewModel.updateAlarm(alarm)
                     cancelAlarm(alarm)
+                }
+            },
+            onCheckBoxCheckedChangeListener = { alarm, isChecked ->
+                if (isChecked) {
+                    alarm.deleteCheck = true
+                    alarmViewModel.updateAlarm(alarm)
+                } else {
+                    alarm.deleteCheck = false
+                    alarmViewModel.updateAlarm(alarm)
+
                 }
             },
             actFragViewModel,

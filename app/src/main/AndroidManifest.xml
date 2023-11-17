@@ -48,6 +48,8 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service android:name=".service.StopClockService"/>
+
     </application>
 
 </manifest>
