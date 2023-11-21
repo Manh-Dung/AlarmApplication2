@@ -3,12 +3,10 @@ package com.example.alarmapplication2.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.alarmapplication2.data.AlarmDAO
-import com.example.alarmapplication2.data.AlarmDatabase
 import com.example.alarmapplication2.data.StopClockDAO
 import com.example.alarmapplication2.data.StopClockDatabase
-import com.example.alarmapplication2.domain.Alarm
 import com.example.alarmapplication2.domain.StopClock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

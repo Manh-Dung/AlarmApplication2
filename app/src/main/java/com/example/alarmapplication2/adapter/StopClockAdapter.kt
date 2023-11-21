@@ -41,7 +41,7 @@ class StopClockAdapter : RecyclerView.Adapter<StopClockAdapter.StopClockViewHold
     override fun onBindViewHolder(holder: StopClockViewHolder, position: Int) {
         val stopClock = stopClockList[position]
         holder.stopClockIdTxt.text = stopClock.id.toString()
-        holder.preTimeTxt.text = stopClock.preTime.toString()
-        holder.stopTimeTxt.text = stopClock.time.toString()
+        holder.preTimeTxt.text = stopClock.preTime
+        holder.stopTimeTxt.text = stopClock.time
     }
 }

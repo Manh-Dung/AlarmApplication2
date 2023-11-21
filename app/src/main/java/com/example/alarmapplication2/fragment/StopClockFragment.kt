@@ -4,22 +4,26 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room.databaseBuilder
 import com.example.alarmapplication2.R
-import com.example.alarmapplication2.adapter.AlarmAdapter
 import com.example.alarmapplication2.adapter.StopClockAdapter
+import com.example.alarmapplication2.data.StopClockDatabase
 import com.example.alarmapplication2.databinding.FragmentStopClockBinding
-import com.example.alarmapplication2.domain.Alarm
 import com.example.alarmapplication2.domain.StopClock
 import com.example.alarmapplication2.service.StopClockService
 import com.example.alarmapplication2.viewmodel.StopClockViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 
 class StopClockFragment : Fragment() {
     private var _binding: FragmentStopClockBinding? = null
@@ -74,7 +78,28 @@ class StopClockFragment : Fragment() {
                     flagStopClockBtn.visibility = View.GONE
                     pauseStopClockBtn.visibility = View.GONE
                     playStopClockBtn.visibility = View.VISIBLE
+
+                    stopClockViewModel.deleteClock()
+
+                    stopClockTxt.animate().apply {
+                        duration = 300
+                        translationY(200f)
+                    }.start()
+
+                    scrollLayout.animate().apply {
+                        duration = 300
+                        translationY(200f)
+                    }.start()
                 } else {
+                    stopClockTxt.animate().apply {
+                        duration = 300
+                        translationY(-500f)
+                    }.start()
+
+                    scrollLayout.animate().apply {
+                        duration = 300
+                        translationY(-500f)
+                    }.start()
                     setFlag()
                 }
             }
@@ -90,7 +115,8 @@ class StopClockFragment : Fragment() {
         val currentTime = getTimeStringFromDouble(time)
 
         // Lấy thời gian từ lần dừng cuối cùng từ ViewModel
-        val lastTime = stopClockViewModel.getAllClocks().value?.lastOrNull()?.time
+        val lastTime = stopClockViewModel.getAllClocks.value?.firstOrNull()?.time
+        Log.v("CAKCKAC", "$lastTime")
 
         // Tính toán khoảng thời gian từ lần dừng cuối cùng
         val preTime = if (lastTime != null) {
@@ -118,6 +144,9 @@ class StopClockFragment : Fragment() {
 
         // Tính toán sự khác biệt giữa hai thời điểm
         val diff = d2.time - d1.time
+        Log.v("CAKCKAC", "$diff")
+        Log.v("CAKCKAC", "d2 = ${d2.time}")
+        Log.v("CAKCKAC", "d1 = ${d1.time}")
 
         val hours = diff / (60 * 60 * 1000) % 24
         val minutes = diff / (60 * 1000) % 60

@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/scrollLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="40dp"
@@ -31,7 +32,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stopClockRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
