@@ -11,8 +11,6 @@ import com.example.alarmapplication2.receiver.DismissReceiver
 import com.example.alarmapplication2.receiver.SnoozeReceiver
 
 class AlarmService : Service() {
-    private val NOTIFICATION_ID = 1
-
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val alarmId = intent.getIntExtra("alarm_id", -1)
         val dismissIntent = Intent(this, DismissReceiver::class.java)
@@ -45,7 +43,7 @@ class AlarmService : Service() {
 
         when (intent.action) {
             Constants.ACTION.START_FOREGROUND_ACTION -> {
-                startForeground(NOTIFICATION_ID, notification)
+                startForeground(alarmId, notification)
             }
             Constants.ACTION.STOP_FOREGROUND_ACTION -> {
                 stopForeground(STOP_FOREGROUND_REMOVE)

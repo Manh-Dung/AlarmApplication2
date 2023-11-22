@@ -161,12 +161,15 @@ class AlarmFragment : Fragment() {
 
         binding.deleteBtn.setOnClickListener {
             alarmViewModel.deleteAlarm(alarm)
+//            alarmViewModel.deleteAlarm()
 
             binding.addAlarmBtn.visibility = View.VISIBLE
             binding.bottomDelete.visibility = View.GONE
 
             actFragViewModel.setDeleteLayoutOn(false)
         }
+
+        alarmLoad(alarmInit())
     }
 
     /**
@@ -251,6 +254,8 @@ class AlarmFragment : Fragment() {
             )
             Toast.makeText(requireContext(), "Alarm set Successfully", Toast.LENGTH_SHORT).show()
         }
+
+        alarmLoad(alarmInit())
     }
 
     /**
@@ -271,5 +276,6 @@ class AlarmFragment : Fragment() {
 
         alarmManager.cancel(pendingIntent)
         Toast.makeText(requireContext(), "Alarm cancelled", Toast.LENGTH_LONG).show()
+        alarmLoad(alarmInit())
     }
 }

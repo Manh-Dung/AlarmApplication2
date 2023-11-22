@@ -87,7 +87,11 @@ class AlarmAdapter(
         }
     }
 
-    // Thiết lập các listener
+    /**
+     * Method to set up listener for enable alarm button, alarm, long click alarm, check box for deletion
+     * @param holder The AlarmViewHolder contains the components.
+     * @param alarm The selectd alarm, or clicked.
+     */
     private fun setupListeners(holder: AlarmViewHolder, alarm: Alarm) {
         holder.enableAlarmBtn.setOnCheckedChangeListener { _, isChecked ->
             onSwitchCheckedChangeListener(alarm, isChecked)
