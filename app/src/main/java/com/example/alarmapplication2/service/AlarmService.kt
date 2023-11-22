@@ -31,7 +31,7 @@ class AlarmService : Service() {
 
         val notification =
             NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(applicationContext.applicationInfo.icon)
                 .setContentTitle("Alarm Manager")
                 .setContentText("Alarm!!!")
                 .setAutoCancel(true)
@@ -43,7 +43,7 @@ class AlarmService : Service() {
 
         when (intent.action) {
             Constants.ACTION.START_FOREGROUND_ACTION -> {
-                startForeground(alarmId, notification)
+                startForeground(123, notification)
             }
             Constants.ACTION.STOP_FOREGROUND_ACTION -> {
                 stopForeground(STOP_FOREGROUND_REMOVE)

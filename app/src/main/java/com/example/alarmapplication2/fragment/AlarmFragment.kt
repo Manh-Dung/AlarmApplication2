@@ -26,6 +26,7 @@ import com.example.alarmapplication2.viewmodel.AlarmViewModel
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.util.Calendar
+import android.util.Log
 
 class AlarmFragment : Fragment() {
     // Binding for the fragment's view
@@ -245,17 +246,17 @@ class AlarmFragment : Fragment() {
 
         if (!alarmManager.canScheduleExactAlarms()) {
             val intentTmp = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-            intentTmp.data = Uri.parse("package:com.android.application")
+            intentTmp.data = Uri.parse("package:com.example.alarmapplication2")
             startActivity(intentTmp)
         } else {
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP, calendar.timeInMillis,
                 pendingIntent
             )
-            Toast.makeText(requireContext(), "Alarm set Successfully", Toast.LENGTH_SHORT).show()
         }
+        Toast.makeText(requireContext(), "Alarm set Successfully", Toast.LENGTH_SHORT).show()
 
-        alarmLoad(alarmInit())
+        Log.v("cakcka", "id = ${alarm.id}")
     }
 
     /**
@@ -274,8 +275,10 @@ class AlarmFragment : Fragment() {
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
+        pendingIntent.cancel()
         alarmManager.cancel(pendingIntent)
         Toast.makeText(requireContext(), "Alarm cancelled", Toast.LENGTH_LONG).show()
-        alarmLoad(alarmInit())
+        Log.v("cakcka", "id = ${alarm.id}")
+
     }
 }
