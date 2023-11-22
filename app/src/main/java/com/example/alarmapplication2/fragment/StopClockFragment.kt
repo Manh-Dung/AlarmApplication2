@@ -5,17 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room.databaseBuilder
 import com.example.alarmapplication2.R
 import com.example.alarmapplication2.adapter.StopClockAdapter
-import com.example.alarmapplication2.data.StopClockDatabase
 import com.example.alarmapplication2.databinding.FragmentStopClockBinding
 import com.example.alarmapplication2.domain.StopClock
 import com.example.alarmapplication2.service.StopClockService
@@ -46,6 +43,7 @@ class StopClockFragment : Fragment() {
 
         serviceIntent = Intent(requireActivity(), StopClockService::class.java)
         activity?.registerReceiver(updateTime, IntentFilter(StopClockService.TIMER_UPDATED))
+
         stopClockLoad(stopClockInit())
 
         return binding.root
@@ -61,8 +59,21 @@ class StopClockFragment : Fragment() {
         return adapter
     }
 
+
+    private fun stopClockLoad(adapter: StopClockAdapter) {
+        stopClockViewModel.getAllClocks.observe(requireActivity()) {
+            adapter.updateData(it)
+        }
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupButtons()
+    }
+
+    private fun setupButtons() {
         binding.apply {
             playStopClockBtn.setOnClickListener {
                 startTimer()
@@ -70,96 +81,67 @@ class StopClockFragment : Fragment() {
                 flagStopClockBtn.visibility = View.VISIBLE
                 pauseStopClockBtn.visibility = View.VISIBLE
             }
-
             flagStopClockBtn.setOnClickListener {
-                if (!isPlay) {
-                    resetTimer()
-
-                    flagStopClockBtn.visibility = View.GONE
-                    pauseStopClockBtn.visibility = View.GONE
-                    playStopClockBtn.visibility = View.VISIBLE
-
-                    stopClockViewModel.deleteClock()
-
-                    stopClockTxt.animate().apply {
-                        duration = 300
-                        translationY(200f)
-                    }.start()
-
-                    scrollLayout.animate().apply {
-                        duration = 300
-                        translationY(200f)
-                    }.start()
-                } else {
-                    stopClockTxt.animate().apply {
-                        duration = 300
-                        translationY(-500f)
-                    }.start()
-
-                    scrollLayout.animate().apply {
-                        duration = 300
-                        translationY(-500f)
-                    }.start()
-                    setFlag()
-                }
+                handleFlagClick()
             }
-
             pauseStopClockBtn.setOnClickListener {
                 startStopTimer()
             }
         }
+
+    }
+
+    private fun handleFlagClick() {
+        if (!isPlay) {
+            binding.flagStopClockBtn.visibility = View.GONE
+            binding.pauseStopClockBtn.visibility = View.GONE
+            binding.playStopClockBtn.visibility = View.VISIBLE
+
+            resetTimer()
+            stopClockViewModel.deleteClock()
+            animateViews(200f, 60f)
+        } else {
+            animateViews(-500f, 40f)
+            setFlag()
+        }
+    }
+
+    private fun animateViews(translationY: Float, textSize: Float) {
+        binding.stopClockTxt.animate().apply {
+            duration = 300
+            translationY(translationY)
+        }.start()
+
+        binding.scrollLayout.animate().apply {
+            duration = 300
+            translationY(translationY)
+        }.start()
+
+        binding.stopClockTxt.textSize = textSize
     }
 
     private fun setFlag() {
-        // Lấy thời gian hiện tại
         val currentTime = getTimeStringFromDouble(time)
 
-        // Lấy thời gian từ lần dừng cuối cùng từ ViewModel
         val lastTime = stopClockViewModel.getAllClocks.value?.firstOrNull()?.time
-        Log.v("CAKCKAC", "$lastTime")
 
-        // Tính toán khoảng thời gian từ lần dừng cuối cùng
         val preTime = if (lastTime != null) {
             getTimeDifference(lastTime, currentTime)
         } else {
-            "00:00:00" // Nếu không có thời gian dừng cuối cùng, đặt preTime thành 0
+            "00:00:00"
         }
 
-        // Tạo một đối tượng StopClock mới với thời gian hiện tại và preTime
         val stopClock = StopClock(
             null,
             preTime,
             currentTime
         )
 
-        // Chèn đối tượng StopClock mới vào ViewModel
         stopClockViewModel.insertClock(stopClock)
     }
 
-    private fun getTimeDifference(startTime: String, endTime: String): String {
-        val format = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-
-        val d1: Date = format.parse(startTime)
-        val d2: Date = format.parse(endTime)
-
-        // Tính toán sự khác biệt giữa hai thời điểm
-        val diff = d2.time - d1.time
-        Log.v("CAKCKAC", "$diff")
-        Log.v("CAKCKAC", "d2 = ${d2.time}")
-        Log.v("CAKCKAC", "d1 = ${d1.time}")
-
-        val hours = diff / (60 * 60 * 1000) % 24
-        val minutes = diff / (60 * 1000) % 60
-        val seconds = diff / 1000 % 60
-
-        return makeTimeString(hours.toInt(), minutes.toInt(), seconds.toInt())
-    }
-
     private fun startStopTimer() {
-        if (isPlay)
-            stopTimer()
-        else
-            startTimer()
+        if (isPlay) stopTimer() else startTimer()
     }
 
     private fun resetTimer() {
@@ -171,23 +153,39 @@ class StopClockFragment : Fragment() {
     private fun startTimer() {
         serviceIntent.putExtra(StopClockService.TIME_EXTRA, time)
         activity?.startService(serviceIntent)
-        binding.pauseStopClockBtn.setImageResource(R.drawable.pause_ic)
-        binding.flagStopClockBtn.setImageResource(R.drawable.flag_ic)
+
+        binding.apply {
+            pauseStopClockBtn.setImageResource(R.drawable.pause_ic)
+            flagStopClockBtn.setImageResource(R.drawable.flag_ic)
+        }
+
         isPlay = true
     }
 
     private fun stopTimer() {
         activity?.stopService(serviceIntent)
-        binding.pauseStopClockBtn.setImageResource(R.drawable.play_ic)
-        binding.flagStopClockBtn.setImageResource(R.drawable.stop_ic)
+
+        binding.apply {
+            pauseStopClockBtn.setImageResource(R.drawable.play_ic)
+            flagStopClockBtn.setImageResource(R.drawable.stop_ic)
+        }
+
         isPlay = false
     }
 
-    private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            time = intent.getDoubleExtra(StopClockService.TIME_EXTRA, 0.0)
-            binding.stopClockTxt.text = getTimeStringFromDouble(time)
-        }
+    private fun getTimeDifference(startTime: String, endTime: String): String {
+        val format = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+
+        val d1: Date = format.parse(startTime)
+        val d2: Date = format.parse(endTime)
+
+        val diff = d2.time - d1.time
+
+        val hours = diff / (60 * 60 * 1000) % 24
+        val minutes = diff / (60 * 1000) % 60
+        val seconds = diff / 1000 % 60
+
+        return makeTimeString(hours.toInt(), minutes.toInt(), seconds.toInt())
     }
 
     private fun getTimeStringFromDouble(time: Double): String {
@@ -202,9 +200,14 @@ class StopClockFragment : Fragment() {
     private fun makeTimeString(hour: Int, min: Int, sec: Int): String =
         String.format("%02d:%02d:%02d", hour, min, sec)
 
-    private fun stopClockLoad(adapter: StopClockAdapter) {
-        stopClockViewModel.getAllClocks.observe(requireActivity()) {
-            adapter.updateData(it)
+    private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            time = intent.getDoubleExtra(StopClockService.TIME_EXTRA, 0.0)
+            binding.stopClockTxt.text = getTimeStringFromDouble(time)
         }
     }
+
+
+
+
 }

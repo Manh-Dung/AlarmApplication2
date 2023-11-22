@@ -4,12 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.alarmapplication2.domain.Alarm
 import com.example.alarmapplication2.domain.StopClock
 
 @Database(entities = [StopClock::class], version = 3, exportSchema = false)
 abstract class StopClockDatabase : RoomDatabase() {
-    abstract fun stopClockDAO() : StopClockDAO
+    abstract fun stopClockDAO(): StopClockDAO
 
     companion object {
         @Volatile

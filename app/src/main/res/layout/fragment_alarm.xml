@@ -55,13 +55,13 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="17dp"
-            android:drawableTop="@drawable/delete_ic"
             android:padding="2sp"
             android:text="Xóa"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:drawableTopCompat="@drawable/delete_ic" />
 
     </FrameLayout>
 

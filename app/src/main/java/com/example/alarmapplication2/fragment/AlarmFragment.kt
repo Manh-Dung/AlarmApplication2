@@ -48,7 +48,7 @@ class AlarmFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAlarmBinding.inflate(inflater, container, false)
 
         binding.addAlarmBtn.visibility = View.VISIBLE
@@ -185,8 +185,8 @@ class AlarmFragment : Fragment() {
             val alarm = Alarm(
                 null,
                 pickerTime,
-                true,
-                false
+                isEnable = true,
+                deleteCheck = false
             )
 
             alarmViewModel.insertAlarm(alarm)

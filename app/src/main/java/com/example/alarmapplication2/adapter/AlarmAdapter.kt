@@ -59,7 +59,7 @@ class AlarmAdapter(
         holder.alarmTimeTxt.text = alarm.time
         holder.enableAlarmBtn.isChecked = alarm.isEnable
 
-        setupViews(holder, alarm)
+        setupViews(holder)
         setupListeners(holder, alarm)
     }
 
@@ -69,8 +69,8 @@ class AlarmAdapter(
     }
 
     // Thiết lập các view
-    private fun setupViews(holder: AlarmViewHolder, alarm: Alarm) {
-        var countDeleted = alarmList.count { it.deleteCheck }
+    private fun setupViews(holder: AlarmViewHolder) {
+        val countDeleted = alarmList.count { it.deleteCheck }
 
         if (actFragViewModel.deleteLayoutOn.value == true) {
             holder.checkDeleteBtn.visibility = View.VISIBLE
@@ -82,7 +82,7 @@ class AlarmAdapter(
 
         if (actFragViewModel.checkAll.value == true && countDeleted == itemCount) {
             holder.checkDeleteBtn.isChecked = true
-        } else if (actFragViewModel.checkAll.value == false && countDeleted != getItemCount()) {
+        } else if (actFragViewModel.checkAll.value == false && countDeleted != itemCount) {
             holder.checkDeleteBtn.isChecked = false
         }
     }
@@ -108,7 +108,7 @@ class AlarmAdapter(
         }
 
         holder.checkDeleteBtn.setOnCheckedChangeListener { _, isChecked ->
-            var countDeleted = alarmList.count { it.deleteCheck }
+            val countDeleted = alarmList.count { it.deleteCheck }
             if (isChecked) {
                 if (countDeleted == itemCount) {
                     actFragViewModel.setCheckAll(true)

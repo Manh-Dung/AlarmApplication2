@@ -7,5 +7,5 @@
     <color name="item_bg">#242424</color> 
     <color name="times">#454545</color>
     <color name="switch_btn">#515151</color>
-    <color name="bottom_bg">#101010</color>
+    <color name="colorPrimaryDark">#0E121B</color>
 </resources>

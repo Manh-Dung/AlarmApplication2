@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             actFragViewModel.setDeleteLayoutOn(false)
         }
 
-        var isCheckDelete: Boolean = false
+        var isCheckDelete = false
         actFragViewModel.checkAll.observe(this) {
             isCheckDelete = it
         }
