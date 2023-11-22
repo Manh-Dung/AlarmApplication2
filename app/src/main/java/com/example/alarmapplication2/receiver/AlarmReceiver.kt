@@ -18,8 +18,6 @@ class AlarmReceiver : BroadcastReceiver() {
         serviceIntent.putExtra("alarm_id", alarmId)
         context?.startForegroundService(serviceIntent)
 
-
-
 //        val i = Intent(context, MainActivity::class.java)
 //        intent!!.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 //

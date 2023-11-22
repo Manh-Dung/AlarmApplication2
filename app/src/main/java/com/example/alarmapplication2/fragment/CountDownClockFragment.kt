@@ -28,7 +28,6 @@ class CountDownClockFragment : Fragment() {
         STARTED, STOPPED
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,29 +49,20 @@ class CountDownClockFragment : Fragment() {
     private fun startStop() {
         if (timerStatus === TimerStatus.STOPPED) {
 
-            // call to initialize the timer values
             setTimerValues()
-            // call to initialize the progress bar values
             setProgressBarValues()
-            // showing the reset icon
+
             binding.imageViewReset.visibility = View.VISIBLE
-            // changing play icon to stop icon
             binding.imageViewStartStop.setImageResource(R.drawable.stop_count_down_clock_ic)
-            // making edit text not editable
             binding.editTextMinute.isEnabled = false
-            // changing the timer status to started
             timerStatus = TimerStatus.STARTED
-            // call to start the count down timer
+
             startCountDownTimer()
         } else {
 
-            // hiding the reset icon
             binding.imageViewReset.visibility = View.GONE
-            // changing stop icon to start icon
             binding.imageViewStartStop.setImageResource(R.drawable.start_ic)
-            // making edit text editable
             binding.editTextMinute.isEnabled = true
-            // changing the timer status to stopped
             timerStatus = TimerStatus.STOPPED
             stopCountDownTimer()
         }
@@ -107,15 +97,10 @@ class CountDownClockFragment : Fragment() {
 
             override fun onFinish() {
                 binding.textViewTime.text = hmsTimeFormatter(timeCountInMilliSeconds)
-                // call to initialize the progress bar values
                 setProgressBarValues()
-                // hiding the reset icon
                 binding.imageViewReset.visibility = View.GONE
-                // changing stop icon to start icon
                 binding.imageViewStartStop.setImageResource(R.drawable.start_ic)
-                // making edit text editable
                 binding.editTextMinute.isEnabled = true
-                // changing the timer status to stopped
                 timerStatus = TimerStatus.STOPPED
             }
         }.start()
