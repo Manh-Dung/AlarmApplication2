@@ -31,7 +31,7 @@ class AlarmService : Service() {
 
         val notification =
             NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(applicationContext.applicationInfo.icon)
+                .setSmallIcon(R.drawable.notifications_ic)
                 .setContentTitle("Alarm Manager")
                 .setContentText("Alarm!!!")
                 .setAutoCancel(true)

@@ -80,9 +80,13 @@ class MainActivity : AppCompatActivity() {
             if (it) {
                 binding.deleteSelectLayout.visibility = View.VISIBLE
                 binding.tabLayout.visibility = View.GONE
+
+                actFragViewModel.setCheckAll(false)
             } else {
                 binding.deleteSelectLayout.visibility = View.GONE
                 binding.tabLayout.visibility = View.VISIBLE
+
+                actFragViewModel.setCheckAll(false)
             }
         }
     }

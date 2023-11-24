@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,6 @@ import com.example.alarmapplication2.viewmodel.AlarmViewModel
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.util.Calendar
-import android.util.Log
 
 class AlarmFragment : Fragment() {
     // Binding for the fragment's view
@@ -80,6 +80,8 @@ class AlarmFragment : Fragment() {
             } else {
                 binding.addAlarmBtn.visibility = View.VISIBLE
                 binding.bottomDelete.visibility = View.GONE
+
+                alarmViewModel.setDeleteCheckAll(false)
             }
         }
     }
@@ -112,13 +114,15 @@ class AlarmFragment : Fragment() {
                 alarmViewModel.updateAlarm(alarm)
             },
             actFragViewModel,
+            alarmViewModel,
             requireActivity()
         )
 
         binding.recyclerViewAlarm.apply {
             setHasFixedSize(true)
             this.adapter = adapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
         return adapter
     }
@@ -160,18 +164,43 @@ class AlarmFragment : Fragment() {
         binding.addAlarmBtn.visibility = View.GONE
         binding.bottomDelete.visibility = View.VISIBLE
 
-        binding.deleteBtn.setOnClickListener {
-            alarmViewModel.deleteAlarm(alarm)
-//            alarmViewModel.deleteAlarm()
+        actFragViewModel.checkAll.observe(requireActivity()) {
+            if (it) {
+                binding.deleteBtn.setOnClickListener {
+                    alarmViewModel.deleteAlarm(true)
 
-            binding.addAlarmBtn.visibility = View.VISIBLE
-            binding.bottomDelete.visibility = View.GONE
+                    actFragViewModel.setCheckAll(false)
 
-            actFragViewModel.setDeleteLayoutOn(false)
+                    binding.addAlarmBtn.visibility = View.VISIBLE
+                    binding.bottomDelete.visibility = View.GONE
+
+                    actFragViewModel.setDeleteLayoutOn(false)
+                }
+            } else {
+                binding.deleteBtn.setOnClickListener {
+                    alarmViewModel.deleteAlarm(alarm)
+
+                    actFragViewModel.setCheckAll(false)
+
+                    binding.addAlarmBtn.visibility = View.VISIBLE
+                    binding.bottomDelete.visibility = View.GONE
+
+                    actFragViewModel.setDeleteLayoutOn(false)
+                }
+            }
         }
-
-        alarmLoad(alarmInit())
     }
+//    binding.deleteBtn.setOnClickListener
+//    {
+//        if (actFragViewModel.checkAll.value != null && actFragViewModel.checkAll.value = true) {
+//            alarmViewModel.deleteAlarm(true)
+//        } else {
+//            alarmViewModel.deleteAlarm(alarm)
+//        }
+//
+//
+//    }
+//}
 
     /**
      * Observes and loads all alarms from the database into the provided adapter.
@@ -254,9 +283,6 @@ class AlarmFragment : Fragment() {
                 pendingIntent
             )
         }
-        Toast.makeText(requireContext(), "Alarm set Successfully", Toast.LENGTH_SHORT).show()
-
-        Log.v("cakcka", "id = ${alarm.id}")
     }
 
     /**
@@ -277,8 +303,5 @@ class AlarmFragment : Fragment() {
 
         pendingIntent.cancel()
         alarmManager.cancel(pendingIntent)
-        Toast.makeText(requireContext(), "Alarm cancelled", Toast.LENGTH_LONG).show()
-        Log.v("cakcka", "id = ${alarm.id}")
-
     }
 }

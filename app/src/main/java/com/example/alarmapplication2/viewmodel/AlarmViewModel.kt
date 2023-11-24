@@ -37,9 +37,15 @@ class AlarmViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun deleteAlarm() {
+    fun deleteAlarm(deleteCheck: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            alarmDAO.deleteCheckedAlarms()
+            alarmDAO.deleteCheckedAlarms(deleteCheck)
+        }
+    }
+
+    fun setDeleteCheckAll(deleteCheck: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            alarmDAO.setDeleteCheckAll(deleteCheck)
         }
     }
 }
