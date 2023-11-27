@@ -45,6 +45,7 @@ class AlarmService : Service() {
             Constants.ACTION.START_FOREGROUND_ACTION -> {
                 startForeground(123, notification)
             }
+
             Constants.ACTION.STOP_FOREGROUND_ACTION -> {
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()

@@ -4,11 +4,12 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="com.android.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name=".application.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -30,17 +31,17 @@
         </activity>
 
         <receiver
-            android:name="com.example.alarmapplication2.receiver.AlarmReceiver"
+            android:name=".receiver.AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <receiver
-            android:name="com.example.alarmapplication2.receiver.DismissReceiver"
+            android:name=".receiver.DismissReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <receiver
-            android:name="com.example.alarmapplication2.receiver.SnoozeReceiver"
+            android:name=".receiver.SnoozeReceiver"
             android:enabled="true"
             android:exported="false" />
 

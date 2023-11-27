@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,6 +59,7 @@ class AlarmFragment : Fragment() {
         binding.addAlarmBtn.visibility = View.VISIBLE
         alarmLoad(alarmInit())
 
+
         return binding.root
     }
 
@@ -96,9 +96,9 @@ class AlarmFragment : Fragment() {
     private fun alarmInit(): AlarmAdapter {
         val adapter = AlarmAdapter(
             onItemClickLister = { alarm -> updateAlarm(alarm) },
-            onItemLongClickListener = {
+            onItemLongClickListener = { alarm ->
                 actFragViewModel.setDeleteLayoutOn(true)
-                deleteAlarm(it)
+                deleteAlarm(alarm)
             },
             onSwitchCheckedChangeListener = { alarm, isChecked ->
                 alarm.isEnable = isChecked
@@ -278,10 +278,17 @@ class AlarmFragment : Fragment() {
             intentTmp.data = Uri.parse("package:com.example.alarmapplication2")
             startActivity(intentTmp)
         } else {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP, calendar.timeInMillis,
-                pendingIntent
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP, calendar.timeInMillis,
+                    pendingIntent
+                )
+            } else {
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP, calendar.timeInMillis,
+                    pendingIntent
+                )
+            }
         }
     }
 
@@ -301,7 +308,7 @@ class AlarmFragment : Fragment() {
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
-        pendingIntent.cancel()
         alarmManager.cancel(pendingIntent)
+        pendingIntent.cancel()
     }
 }
