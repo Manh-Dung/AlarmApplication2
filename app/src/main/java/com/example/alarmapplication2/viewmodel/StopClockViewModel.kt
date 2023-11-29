@@ -8,30 +8,33 @@ import androidx.lifecycle.viewModelScope
 import com.example.alarmapplication2.data.StopClockDAO
 import com.example.alarmapplication2.data.StopClockDatabase
 import com.example.alarmapplication2.domain.StopClock
+import com.example.alarmapplication2.repository.AlarmRepository
+import com.example.alarmapplication2.repository.StopClockRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class StopClockViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository: StopClockRepository
     val getAllClocks: LiveData<List<StopClock>>
-    private val stopClockDAO: StopClockDAO
 
     private val _lastTime = MutableLiveData<String>()
     val lastTime: LiveData<String> get() = _lastTime
 
     init {
-        stopClockDAO = StopClockDatabase.getDatabase(application).stopClockDAO()
-        getAllClocks = stopClockDAO.getAllClocks()
+        val stopClockDAO = StopClockDatabase.getDatabase(application).stopClockDAO()
+        repository = StopClockRepository(stopClockDAO)
+        getAllClocks = repository.getAllClocks
     }
 
     fun insertClock(stopClock: StopClock) {
         viewModelScope.launch(Dispatchers.IO) {
-            stopClockDAO.insertClock(stopClock)
+            repository.insertClock(stopClock)
         }
     }
 
     fun deleteClock() {
         viewModelScope.launch(Dispatchers.IO) {
-            stopClockDAO.deleteClocks()
+            repository.deleteClocks()
         }
     }
 
