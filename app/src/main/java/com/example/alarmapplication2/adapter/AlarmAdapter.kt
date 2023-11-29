@@ -27,7 +27,6 @@ class AlarmAdapter(
 
     // Khởi tạo danh sách rỗng
     private var alarmList = emptyList<Alarm>()
-    var countDelete = 0
 
     // ViewHolder chứa các view cần thiết
     class AlarmViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,7 +44,6 @@ class AlarmAdapter(
     // Khởi tạo và quan sát các biến LiveData
     init {
         actFragViewModel.deleteLayoutOn.observe(lifecycleOwner) { notifyDataSetChanged() }
-        actFragViewModel.checkAll.observe(lifecycleOwner) { notifyDataSetChanged() }
     }
 
     // Cập nhật dữ liệu
@@ -68,7 +66,7 @@ class AlarmAdapter(
         holder.enableAlarmBtn.isChecked = alarm.isEnable
         holder.checkDeleteBtn.isChecked = alarm.deleteCheck
 
-        setupViews(holder, alarm)
+        setupViews(holder)
         setupListeners(holder, alarm)
     }
 
@@ -76,8 +74,19 @@ class AlarmAdapter(
         return alarmList.size
     }
 
+    private fun getCheckDeleteAlarm(): Int {
+        var countDelete = 0
+        for (alarm in alarmList) {
+            if (alarm.deleteCheck) {
+                countDelete++
+            }
+        }
+
+        return countDelete
+    }
+
     // Set up views
-    private fun setupViews(holder: AlarmViewHolder, alarm: Alarm) {
+    private fun setupViews(holder: AlarmViewHolder) {
         if (actFragViewModel.deleteLayoutOn.value == true) {
             holder.checkDeleteBtn.visibility = View.VISIBLE
             holder.enableAlarmBtn.visibility = View.GONE
@@ -86,11 +95,7 @@ class AlarmAdapter(
             holder.enableAlarmBtn.visibility = View.VISIBLE
         }
 
-        if (actFragViewModel.checkAll.value == true) {
-            holder.setCheckDeleteBtn(true)
-        } else {
-            holder.setCheckDeleteBtn(false)
-        }
+
     }
 
     /**
@@ -126,5 +131,15 @@ class AlarmAdapter(
             onCheckBoxCheckedChangeListener(alarm, isChecked)
             holder.checkDeleteBtn.post { notifyDataSetChanged() }
         }
+
+//        if (actFragViewModel.checkAll.value == true) {
+//            holder.setCheckDeleteBtn(true)
+//            actFragViewModel.setCheckAll(false)
+//        } else if (actFragViewModel.checkAll.value == false && getCheckDeleteAlarm() != itemCount) {
+//            holder.setCheckDeleteBtn(true)
+//            actFragViewModel.setCheckAll(false)
+//        } else if (actFragViewModel.checkAll.value == false && getCheckDeleteAlarm() == itemCount) {
+//
+//        }
     }
 }

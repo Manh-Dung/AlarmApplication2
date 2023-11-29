@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,7 +98,7 @@ class AlarmFragment : Fragment() {
             onItemClickLister = { alarm -> updateAlarm(alarm) },
             onItemLongClickListener = { alarm ->
                 actFragViewModel.setDeleteLayoutOn(true)
-                deleteAlarm(alarm)
+                deleteAlarm()
             },
             onSwitchCheckedChangeListener = { alarm, isChecked ->
                 alarm.isEnable = isChecked
@@ -116,7 +115,7 @@ class AlarmFragment : Fragment() {
             },
             actFragViewModel,
             alarmViewModel,
-            requireActivity()
+            requireActivity(),
         )
 
         binding.recyclerViewAlarm.apply {
@@ -161,21 +160,19 @@ class AlarmFragment : Fragment() {
      * When the delete button is clicked, the alarm is deleted from the ViewModel, and the UI is reset.
      * @param alarm The alarm to be deleted.
      */
-    private fun deleteAlarm(alarm: Alarm) {
+    private fun deleteAlarm() {
         binding.addAlarmBtn.visibility = View.GONE
         binding.bottomDelete.visibility = View.VISIBLE
 
-        actFragViewModel.checkAll.observe(requireActivity()) {
-            binding.deleteBtn.setOnClickListener {
-                alarmViewModel.deleteAlarm(true)
+        binding.deleteBtn.setOnClickListener {
+            alarmViewModel.deleteAlarm(true)
 
-                actFragViewModel.setCheckAll(false)
+            actFragViewModel.setCheckAll(false)
 
-                binding.addAlarmBtn.visibility = View.VISIBLE
-                binding.bottomDelete.visibility = View.GONE
+            binding.addAlarmBtn.visibility = View.VISIBLE
+            binding.bottomDelete.visibility = View.GONE
 
-                actFragViewModel.setDeleteLayoutOn(false)
-            }
+            actFragViewModel.setDeleteLayoutOn(false)
         }
     }
 
@@ -267,6 +264,8 @@ class AlarmFragment : Fragment() {
                 )
             }
         }
+
+        Toast.makeText(requireActivity(), "Alarm set Succesfully", Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -287,5 +286,7 @@ class AlarmFragment : Fragment() {
 
         alarmManager.cancel(pendingIntent)
         pendingIntent.cancel()
+
+        Toast.makeText(requireActivity(), "Alarm cancelled", Toast.LENGTH_SHORT).show()
     }
 }

@@ -8,7 +8,7 @@ import com.example.alarmapplication2.domain.Alarm
 
 @Database(entities = [Alarm::class], version = 2, exportSchema = false)
 abstract class AlarmDatabase : RoomDatabase() {
-    abstract fun clockDAO() : AlarmDAO
+    abstract fun alarmDAO() : AlarmDAO
 
     companion object {
         @Volatile
