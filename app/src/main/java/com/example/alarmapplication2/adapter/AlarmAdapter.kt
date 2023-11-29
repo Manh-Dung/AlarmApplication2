@@ -36,6 +36,10 @@ class AlarmAdapter(
         val enableAlarmBtn: SwitchCompat = itemView.findViewById(R.id.enableAlarmBtn)
         val alarmLayout: CardView = itemView.findViewById(R.id.alarmLayout)
         val checkDeleteBtn: CheckBox = itemView.findViewById(R.id.checkDeleteBtn)
+
+        fun setCheckDeleteBtn(isChecked: Boolean) {
+            checkDeleteBtn.isChecked = isChecked
+        }
     }
 
     // Khởi tạo và quan sát các biến LiveData
@@ -74,7 +78,6 @@ class AlarmAdapter(
 
     // Set up views
     private fun setupViews(holder: AlarmViewHolder, alarm: Alarm) {
-
         if (actFragViewModel.deleteLayoutOn.value == true) {
             holder.checkDeleteBtn.visibility = View.VISIBLE
             holder.enableAlarmBtn.visibility = View.GONE
@@ -83,15 +86,11 @@ class AlarmAdapter(
             holder.enableAlarmBtn.visibility = View.VISIBLE
         }
 
-
-
-//        if (actFragViewModel.checkAll.value == true && countDelete == itemCount) {
-//            Log.v("cakcak", "count = $countDelete, $itemCount")
-//            holder.checkDeleteBtn.isChecked = true
-//        } else if (actFragViewModel.checkAll.value == false && countDelete != itemCount) {
-//            Log.v("cakcak", "count = $countDelete, $itemCount")
-//            holder.checkDeleteBtn.isChecked = false
-//        }
+        if (actFragViewModel.checkAll.value == true) {
+            holder.setCheckDeleteBtn(true)
+        } else {
+            holder.setCheckDeleteBtn(false)
+        }
     }
 
     /**
@@ -100,8 +99,6 @@ class AlarmAdapter(
      * @param alarm The selected alarm, or clicked.
      */
     private fun setupListeners(holder: AlarmViewHolder, alarm: Alarm) {
-
-        Log.v("cakcka", "${actFragViewModel.deleteLayoutOn.value}")
         holder.enableAlarmBtn.setOnCheckedChangeListener { _, isChecked ->
             onSwitchCheckedChangeListener(alarm, isChecked)
             holder.enableAlarmBtn.post { notifyDataSetChanged() }
@@ -123,44 +120,11 @@ class AlarmAdapter(
             true
         }
 
-//        holder.checkDeleteBtn.setOnCheckedChangeListener { _, isChecked ->
-//            val countDeleted = alarmList.count { it.deleteCheck }
-//            if (isChecked) {
-//                if (countDeleted == itemCount) {
-//                    actFragViewModel.setCheckAll(true)
-//                }
-
-//                countDelete++
-//                onCheckBoxCheckedChangeListener(alarm, isChecked)
-//                notifyDataSetChanged()
-//            } else {
-//                countDelete--
-//                onCheckBoxCheckedChangeListener(alarm, isChecked)
-//                notifyDataSetChanged()
-//            }
-
-
-////                actFragViewModel.setCheckAll(false)
-//                onCheckBoxCheckedChangeListener(alarm, isChecked)
-//                notifyDataSetChanged()
-//            }
-//        }
-
-//        if (actFragViewModel.checkAll.value != null && actFragViewModel.checkAll.value == false) {
-//            holder.checkDeleteBtn.setOnCheckedChangeListener { _, isChecked ->
-//                onCheckBoxCheckedChangeListener(alarm, isChecked)
-//                notifyDataSetChanged()
-//            }
-//        } else {
-//            alarmViewModel.setDeleteCheckAll(true)
-//            notifyDataSetChanged()
-//        }
-
         // su kien xay ra khi nut check box thay doi
         holder.checkDeleteBtn.setOnCheckedChangeListener { _, isChecked ->
+
             onCheckBoxCheckedChangeListener(alarm, isChecked)
             holder.checkDeleteBtn.post { notifyDataSetChanged() }
         }
-
     }
 }

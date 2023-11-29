@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -165,42 +166,18 @@ class AlarmFragment : Fragment() {
         binding.bottomDelete.visibility = View.VISIBLE
 
         actFragViewModel.checkAll.observe(requireActivity()) {
-            if (it) {
-                binding.deleteBtn.setOnClickListener {
-                    alarmViewModel.deleteAlarm(true)
+            binding.deleteBtn.setOnClickListener {
+                alarmViewModel.deleteAlarm(true)
 
-                    actFragViewModel.setCheckAll(false)
+                actFragViewModel.setCheckAll(false)
 
-                    binding.addAlarmBtn.visibility = View.VISIBLE
-                    binding.bottomDelete.visibility = View.GONE
+                binding.addAlarmBtn.visibility = View.VISIBLE
+                binding.bottomDelete.visibility = View.GONE
 
-                    actFragViewModel.setDeleteLayoutOn(false)
-                }
-            } else {
-                binding.deleteBtn.setOnClickListener {
-                    alarmViewModel.deleteAlarm(alarm)
-
-                    actFragViewModel.setCheckAll(false)
-
-                    binding.addAlarmBtn.visibility = View.VISIBLE
-                    binding.bottomDelete.visibility = View.GONE
-
-                    actFragViewModel.setDeleteLayoutOn(false)
-                }
+                actFragViewModel.setDeleteLayoutOn(false)
             }
         }
     }
-//    binding.deleteBtn.setOnClickListener
-//    {
-//        if (actFragViewModel.checkAll.value != null && actFragViewModel.checkAll.value = true) {
-//            alarmViewModel.deleteAlarm(true)
-//        } else {
-//            alarmViewModel.deleteAlarm(alarm)
-//        }
-//
-//
-//    }
-//}
 
     /**
      * Observes and loads all alarms from the database into the provided adapter.
