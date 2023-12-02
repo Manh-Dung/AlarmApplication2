@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.alarmapplication2.R
 import com.example.alarmapplication2.adapter.ViewPagerAdapter
 import com.example.alarmapplication2.databinding.ActivityMainBinding
+import com.example.alarmapplication2.receiver.Constants
 import com.example.alarmapplication2.viewmodel.ActFragViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -63,17 +64,15 @@ class MainActivity : AppCompatActivity() {
             actFragViewModel.setDeleteLayoutOn(false)
         }
 
-        var isCheckDelete = false
-        actFragViewModel.checkAll.observe(this) {
-            isCheckDelete = it
+        actFragViewModel.checkAll.observe(this) { checkAll ->
+            if (checkAll >= 0) {
+                binding.showDeleteTxt.text = "Đã chọn $checkAll mục"
+
+            }
         }
 
         binding.checkAllBtn.setOnClickListener {
-            if (isCheckDelete) {
-                actFragViewModel.setCheckAll(false)
-            } else {
-                actFragViewModel.setCheckAll(true)
-            }
+            actFragViewModel.setCheckAll(Constants.CHECK_DELETE_ON_CLICK)
         }
 
         actFragViewModel.deleteLayoutOn.observe(this) {
@@ -81,12 +80,12 @@ class MainActivity : AppCompatActivity() {
                 binding.deleteSelectLayout.visibility = View.VISIBLE
                 binding.tabLayout.visibility = View.GONE
 
-                actFragViewModel.setCheckAll(false)
+//                actFragViewModel.setCheckAll(false)
             } else {
                 binding.deleteSelectLayout.visibility = View.GONE
                 binding.tabLayout.visibility = View.VISIBLE
 
-                actFragViewModel.setCheckAll(false)
+//                actFragViewModel.setCheckAll(false)
             }
         }
     }

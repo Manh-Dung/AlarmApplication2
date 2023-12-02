@@ -20,13 +20,13 @@ interface AlarmDAO {
     @Delete
     suspend fun deleteAlarm(alarm: Alarm?)
 
-    @Query("DELETE FROM Alarm WHERE deleteCheck = :deleteCheck")
-    suspend fun deleteCheckedAlarms(deleteCheck: Boolean)
-
-    @Query("UPDATE Alarm SET deleteCheck = :deleteCheck")
-    suspend fun setDeleteCheckAll(deleteCheck: Boolean)
+//    @Query("DELETE FROM Alarm WHERE deleteCheck = :deleteCheck")
+//    suspend fun deleteCheckedAlarms(deleteCheck: Boolean)
+//
+//    @Query("UPDATE Alarm SET deleteCheck = :deleteCheck")
+//    suspend fun setDeleteCheckAll(deleteCheck: Boolean)
 
 
     @Query("SELECT * FROM Alarm ORDER BY id DESC")
-    fun getAllAlarms(): LiveData<List<Alarm>>
+    fun getAllAlarms(): LiveData<MutableList<Alarm>>
 }

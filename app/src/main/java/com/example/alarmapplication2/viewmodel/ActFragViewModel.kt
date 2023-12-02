@@ -12,10 +12,10 @@ class ActFragViewModel : ViewModel() {
         _deleteLayoutOn.value = data
     }
 
-    private var _checkAll = MutableLiveData<Boolean>()
-    val checkAll: LiveData<Boolean> get() = _checkAll
+    private var _checkAll = MutableLiveData<Int>()
+    val checkAll: LiveData<Int> get() = _checkAll
 
-    fun setCheckAll(data: Boolean) {
+    fun setCheckAll(data: Int) {
         _checkAll.value = data
     }
 }

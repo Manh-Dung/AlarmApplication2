@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +60,6 @@ class AlarmFragment : Fragment() {
         binding.addAlarmBtn.visibility = View.VISIBLE
         alarmLoad(alarmInit())
 
-
         return binding.root
     }
 
@@ -80,8 +80,7 @@ class AlarmFragment : Fragment() {
             } else {
                 binding.addAlarmBtn.visibility = View.VISIBLE
                 binding.bottomDelete.visibility = View.GONE
-
-                alarmViewModel.setDeleteCheckAll(false)
+//                alarmViewModel.setDeleteCheckAll(false)
             }
         }
     }
@@ -96,9 +95,9 @@ class AlarmFragment : Fragment() {
     private fun alarmInit(): AlarmAdapter {
         val adapter = AlarmAdapter(
             onItemClickLister = { alarm -> updateAlarm(alarm) },
-            onItemLongClickListener = { alarm ->
+            onItemLongClickListener = {
                 actFragViewModel.setDeleteLayoutOn(true)
-                deleteAlarm()
+                deleteAlarm(it)
             },
             onSwitchCheckedChangeListener = { alarm, isChecked ->
                 alarm.isEnable = isChecked
@@ -109,9 +108,10 @@ class AlarmFragment : Fragment() {
                     cancelAlarm(alarm)
                 }
             },
-            onCheckBoxCheckedChangeListener = { alarm, isChecked ->
-                alarm.deleteCheck = isChecked
-                alarmViewModel.updateAlarm(alarm)
+            onCheckBoxCheckedChangeListener = { alarmList ->
+//                alarm.deleteCheck = isChecked
+//                alarmViewModel.updateAlarm(alarm)
+                deleteAlarms(alarmList)
             },
             actFragViewModel,
             alarmViewModel,
@@ -160,14 +160,30 @@ class AlarmFragment : Fragment() {
      * When the delete button is clicked, the alarm is deleted from the ViewModel, and the UI is reset.
      * @param alarm The alarm to be deleted.
      */
-    private fun deleteAlarm() {
+    private fun deleteAlarm(alarm: Alarm) {
         binding.addAlarmBtn.visibility = View.GONE
         binding.bottomDelete.visibility = View.VISIBLE
 
         binding.deleteBtn.setOnClickListener {
-            alarmViewModel.deleteAlarm(true)
+//            alarmViewModel.deleteAlarm(true)
+            alarmViewModel.deleteAlarm(alarm)
 
-            actFragViewModel.setCheckAll(false)
+//            actFragViewModel.setCheckAll(false)
+
+            binding.addAlarmBtn.visibility = View.VISIBLE
+            binding.bottomDelete.visibility = View.GONE
+
+            actFragViewModel.setDeleteLayoutOn(false)
+        }
+    }
+
+    private fun deleteAlarms(alarmList: MutableList<Alarm>) {
+        binding.addAlarmBtn.visibility = View.GONE
+        binding.bottomDelete.visibility = View.VISIBLE
+        binding.deleteBtn.setOnClickListener {
+            for (alarm in alarmList) {
+                alarmViewModel.deleteAlarm(alarm)
+            }
 
             binding.addAlarmBtn.visibility = View.VISIBLE
             binding.bottomDelete.visibility = View.GONE
@@ -213,7 +229,7 @@ class AlarmFragment : Fragment() {
                 null,
                 pickerTime,
                 isEnable = true,
-                deleteCheck = false
+//                deleteCheck = false
             )
 
             alarmViewModel.insertAlarm(alarm)
@@ -224,7 +240,6 @@ class AlarmFragment : Fragment() {
     /**
      * Sets an exact alarm at the time specified in the provided alarm object. If the device does not support exact alarms, the user is prompted to grant the necessary permission.
      */
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun setAlarm(alarm: Alarm) {
         val tmp = alarm.time.split(":")
 

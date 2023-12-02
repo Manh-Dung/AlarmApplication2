@@ -6,7 +6,7 @@ import com.example.alarmapplication2.domain.Alarm
 
 class AlarmRepository(private val alarmDAO: AlarmDAO) {
 
-    val getAllAlarms: LiveData<List<Alarm>> = alarmDAO.getAllAlarms()
+    val getAllAlarms: LiveData<MutableList<Alarm>> = alarmDAO.getAllAlarms()
 
     suspend fun insertAlarm(alarm: Alarm) {
         alarmDAO.insertAlarm(alarm)
@@ -20,11 +20,11 @@ class AlarmRepository(private val alarmDAO: AlarmDAO) {
         alarmDAO.deleteAlarm(alarm)
     }
 
-    suspend fun deleteAlarm(deleteCheck: Boolean) {
-        alarmDAO.deleteCheckedAlarms(deleteCheck)
-    }
-
-    suspend fun setDeleteCheckAll(deleteCheck: Boolean) {
-        alarmDAO.setDeleteCheckAll(deleteCheck)
-    }
+//    suspend fun deleteAlarm(deleteCheck: Boolean) {
+//        alarmDAO.deleteCheckedAlarms(deleteCheck)
+//    }
+//
+//    suspend fun setDeleteCheckAll(deleteCheck: Boolean) {
+//        alarmDAO.setDeleteCheckAll(deleteCheck)
+//    }
 }
