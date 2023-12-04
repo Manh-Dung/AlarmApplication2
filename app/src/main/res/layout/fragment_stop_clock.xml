@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="80dp"
         android:src="@drawable/play_ic"
-        app:backgroundTint="@color/gray_icon"
+        app:backgroundTint="@color/fab"
         app:tint="@color/blue_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/stopClockTxt"

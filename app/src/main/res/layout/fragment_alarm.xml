@@ -32,7 +32,7 @@
         android:elevation="5dp"
         android:src="@drawable/add_ic"
         android:theme="@style/Base.Theme.AlarmApplication2.Fab"
-        app:backgroundTint="@color/gray_icon"
+        app:backgroundTint="@color/fab"
         app:layout_constraintBottom_toTopOf="@+id/bottomDelete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
