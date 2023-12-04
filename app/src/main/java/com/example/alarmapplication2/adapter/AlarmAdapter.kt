@@ -1,5 +1,8 @@
 package com.example.alarmapplication2.adapter
 
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alarmapplication2.R
 import com.example.alarmapplication2.domain.Alarm
+import com.example.alarmapplication2.receiver.Constants
 import com.example.alarmapplication2.viewmodel.ActFragViewModel
 import com.example.alarmapplication2.viewmodel.AlarmViewModel
 
@@ -21,12 +25,19 @@ class AlarmAdapter(
     private val onSwitchCheckedChangeListener: (Alarm, Boolean) -> Unit,
     private val onCheckBoxCheckedChangeListener: (Alarm, Boolean) -> Unit,
     private val actFragViewModel: ActFragViewModel,
-    private val alarmViewModel: AlarmViewModel,
     lifecycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     // Khởi tạo danh sách rỗng
-    private var alarmList = emptyList<Alarm>()
+    private var alarmList = mutableListOf<Alarm>()
+    private var selectedAlarms = mutableListOf<Alarm>()
+    private var isSelected = false
+    private var allSelected = false
+
+    fun select(delete: Boolean) {
+        allSelected = delete
+        notifyDataSetChanged();
+    }
 
     // ViewHolder chứa các view cần thiết
     class AlarmViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,19 +46,17 @@ class AlarmAdapter(
         val enableAlarmBtn: SwitchCompat = itemView.findViewById(R.id.enableAlarmBtn)
         val alarmLayout: CardView = itemView.findViewById(R.id.alarmLayout)
         val checkDeleteBtn: CheckBox = itemView.findViewById(R.id.checkDeleteBtn)
-
-        fun setCheckDeleteBtn(isChecked: Boolean) {
-            checkDeleteBtn.isChecked = isChecked
-        }
     }
 
     // Khởi tạo và quan sát các biến LiveData
     init {
-        actFragViewModel.deleteLayoutOn.observe(lifecycleOwner) { notifyDataSetChanged() }
+        actFragViewModel.deleteLayoutOn.observe(lifecycleOwner) { Handler(Looper.getMainLooper()).post { notifyDataSetChanged() } }
+        actFragViewModel.checkAll.observe(lifecycleOwner) { Handler(Looper.getMainLooper()).post { notifyDataSetChanged() } }
     }
 
     // Cập nhật dữ liệu
-    fun updateData(newItemList: List<Alarm>) {
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItemList: MutableList<Alarm>) {
         alarmList = newItemList
         notifyDataSetChanged()
     }
@@ -62,6 +71,7 @@ class AlarmAdapter(
     // Gán dữ liệu cho các view trong ViewHolder
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
         val alarm = alarmList[position]
+        Log.v("cakcka", "${alarm.id}, ${alarm.isEnable}")
         holder.alarmTimeTxt.text = alarm.time
         holder.enableAlarmBtn.isChecked = alarm.isEnable
         holder.checkDeleteBtn.isChecked = alarm.deleteCheck
@@ -94,8 +104,6 @@ class AlarmAdapter(
             holder.checkDeleteBtn.visibility = View.GONE
             holder.enableAlarmBtn.visibility = View.VISIBLE
         }
-
-
     }
 
     /**
@@ -106,7 +114,6 @@ class AlarmAdapter(
     private fun setupListeners(holder: AlarmViewHolder, alarm: Alarm) {
         holder.enableAlarmBtn.setOnCheckedChangeListener { _, isChecked ->
             onSwitchCheckedChangeListener(alarm, isChecked)
-            holder.enableAlarmBtn.post { notifyDataSetChanged() }
         }
 
         if (actFragViewModel.deleteLayoutOn.value != true) {
@@ -140,6 +147,38 @@ class AlarmAdapter(
 //            actFragViewModel.setCheckAll(false)
 //        } else if (actFragViewModel.checkAll.value == false && getCheckDeleteAlarm() == itemCount) {
 //
+//        }
+
+        // su kien xay ra khi nut check box thay doi
+//        holder.checkDeleteBtn.setOnCheckedChangeListener { _, _ ->
+//            isSelected = true
+//            if (selectedAlarms.contains(alarm)) {
+//                selectedAlarms.remove(alarm)
+//                holder.checkDeleteBtn.isChecked = false
+//            } else {
+//                selectedAlarms.add(alarm)
+//                holder.checkDeleteBtn.isChecked = true
+//            }
+//
+//            if (selectedAlarms.size == 0) isSelected = false
+//
+//            actFragViewModel.setCheckAll(selectedAlarms.size)
+//            onCheckBoxCheckedChangeListener(selectedAlarms)
+//        }
+//
+//        if (actFragViewModel.checkAll.value == Constants.CHECK_DELETE_ON_CLICK) {
+//            val alarmSet = alarmList.toSet()
+//            val selectedAlarmSet = selectedAlarms.toMutableSet()
+//
+//            if (alarmSet == selectedAlarmSet) {
+//                selectedAlarms.clear()
+//            } else {
+//                selectedAlarmSet.addAll(alarmList)
+//                selectedAlarms = selectedAlarmSet.toMutableList()
+//            }
+//
+//            actFragViewModel.setCheckAll(selectedAlarms.size)
+//            onCheckBoxCheckedChangeListener(selectedAlarms)
 //        }
     }
 }

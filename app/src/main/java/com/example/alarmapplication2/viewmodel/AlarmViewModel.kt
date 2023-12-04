@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class AlarmViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: AlarmRepository
-    val getAllAlarms: LiveData<List<Alarm>>
+    val getAllAlarms: LiveData<MutableList<Alarm>>
 
     init {
         val alarmDAO = AlarmDatabase.getDatabase(application).alarmDAO()

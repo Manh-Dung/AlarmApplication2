@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="45dp"
-        android:paddingBottom="170dp"
+        android:paddingBottom="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,15 +28,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="70dp"
-        android:backgroundTint="@color/gray_icon"
+        android:layout_marginBottom="80dp"
         android:elevation="5dp"
         android:src="@drawable/add_ic"
-        android:tint="@color/blue_icon"
+        android:theme="@style/Base.Theme.AlarmApplication2.Fab"
+        app:backgroundTint="@color/gray_icon"
         app:layout_constraintBottom_toTopOf="@+id/bottomDelete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:maxImageSize="30dp" />
+        app:maxImageSize="30dp"
+        app:shapeAppearanceOverlay="@style/fab_rounded"
+        app:tint="@color/blue_icon" />
 
     <FrameLayout
         android:id="@+id/bottomDelete"

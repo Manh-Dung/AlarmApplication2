@@ -96,14 +96,14 @@ class AlarmFragment : Fragment() {
     private fun alarmInit(): AlarmAdapter {
         val adapter = AlarmAdapter(
             onItemClickLister = { alarm -> updateAlarm(alarm) },
-            onItemLongClickListener = { alarm ->
+            onItemLongClickListener = {
                 actFragViewModel.setDeleteLayoutOn(true)
                 deleteAlarm()
             },
             onSwitchCheckedChangeListener = { alarm, isChecked ->
                 alarm.isEnable = isChecked
                 alarmViewModel.updateAlarm(alarm)
-                if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isChecked) {
                     setAlarm(alarm)
                 } else {
                     cancelAlarm(alarm)
@@ -114,8 +114,7 @@ class AlarmFragment : Fragment() {
                 alarmViewModel.updateAlarm(alarm)
             },
             actFragViewModel,
-            alarmViewModel,
-            requireActivity(),
+            requireActivity()
         )
 
         binding.recyclerViewAlarm.apply {

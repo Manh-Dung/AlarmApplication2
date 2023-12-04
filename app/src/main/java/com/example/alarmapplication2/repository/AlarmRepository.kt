@@ -6,7 +6,7 @@ import com.example.alarmapplication2.domain.Alarm
 
 class AlarmRepository(private val alarmDAO: AlarmDAO) {
 
-    val getAllAlarms: LiveData<List<Alarm>> = alarmDAO.getAllAlarms()
+    val getAllAlarms: LiveData<MutableList<Alarm>> = alarmDAO.getAllAlarms()
 
     suspend fun insertAlarm(alarm: Alarm) {
         alarmDAO.insertAlarm(alarm)

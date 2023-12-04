@@ -24,4 +24,9 @@
         <!-- inactive track color -->
         <item name="android:colorForeground">@color/switch_btn</item>
     </style>
+
+    <style name="Base.Theme.AlarmApplication2.Fab" parent="Base.Theme.AlarmApplication2">
+        <item name="colorPrimary">@color/gray_icon</item>
+        <item name="colorOnPrimary">@color/blue_icon</item>
+    </style>
 </resources>

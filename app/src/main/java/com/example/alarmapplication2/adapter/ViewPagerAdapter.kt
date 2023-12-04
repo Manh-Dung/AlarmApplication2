@@ -16,8 +16,8 @@ class ViewPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> AlarmFragment()
-            1 -> ClockFragment()
-            2 -> StopClockFragment()
+            1 -> StopClockFragment()
+            2 -> ClockFragment()
             else -> CountDownClockFragment()
         }
     }

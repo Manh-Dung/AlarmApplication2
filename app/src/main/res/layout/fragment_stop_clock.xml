@@ -39,13 +39,15 @@
         android:id="@+id/playStopClockBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp"
-        android:backgroundTint="@color/item_bg"
+        android:layout_marginBottom="80dp"
         android:src="@drawable/play_ic"
+        app:backgroundTint="@color/gray_icon"
+        app:tint="@color/blue_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/stopClockTxt"
         app:layout_constraintStart_toStartOf="@+id/stopClockTxt"
-        app:maxImageSize="30dp" />
+        app:maxImageSize="30dp"
+        app:shapeAppearanceOverlay="@style/fab_rounded" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/flagStopClockBtn"

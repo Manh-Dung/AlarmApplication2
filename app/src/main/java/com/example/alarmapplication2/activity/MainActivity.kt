@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.alarmapplication2.R
 import com.example.alarmapplication2.adapter.ViewPagerAdapter
 import com.example.alarmapplication2.databinding.ActivityMainBinding
+import com.example.alarmapplication2.receiver.Constants
 import com.example.alarmapplication2.viewmodel.ActFragViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
