@@ -12,5 +12,5 @@ data class Alarm(
     var id: Long? = null,
     var time: String,
     var isEnable: Boolean,
-    var deleteCheck: Boolean
+    var isChecked: Boolean
 ) : Parcelable

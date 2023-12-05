@@ -112,6 +112,7 @@ object Constants {
         const val STOP_FOREGROUND_ACTION = "STOP_FOREGROUND"
     }
 
+    const val CHECK_DELETE_ON_CLICK = -1
     const val NOTIFICATION_CHANNEL_ID = "alarm_channel"
 }
 

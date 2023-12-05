@@ -59,7 +59,6 @@ class AlarmFragment : Fragment() {
         binding.addAlarmBtn.visibility = View.VISIBLE
         alarmLoad(alarmInit())
 
-
         return binding.root
     }
 
@@ -110,10 +109,11 @@ class AlarmFragment : Fragment() {
                 }
             },
             onCheckBoxCheckedChangeListener = { alarm, isChecked ->
-                alarm.deleteCheck = isChecked
+                alarm.isChecked = isChecked
                 alarmViewModel.updateAlarm(alarm)
             },
             actFragViewModel,
+            alarmViewModel,
             requireActivity()
         )
 
@@ -165,8 +165,8 @@ class AlarmFragment : Fragment() {
 
         binding.deleteBtn.setOnClickListener {
             alarmViewModel.deleteAlarm(true)
-
-            actFragViewModel.setCheckAll(false)
+//            alarmInit().checkAll()
+//            actFragViewModel.setCheckAll(false)
 
             binding.addAlarmBtn.visibility = View.VISIBLE
             binding.bottomDelete.visibility = View.GONE
@@ -212,7 +212,7 @@ class AlarmFragment : Fragment() {
                 null,
                 pickerTime,
                 isEnable = true,
-                deleteCheck = false
+                isChecked = false
             )
 
             alarmViewModel.insertAlarm(alarm)

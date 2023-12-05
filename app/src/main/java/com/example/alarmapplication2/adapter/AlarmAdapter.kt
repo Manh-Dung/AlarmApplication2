@@ -25,6 +25,7 @@ class AlarmAdapter(
     private val onSwitchCheckedChangeListener: (Alarm, Boolean) -> Unit,
     private val onCheckBoxCheckedChangeListener: (Alarm, Boolean) -> Unit,
     private val actFragViewModel: ActFragViewModel,
+    private val alarmViewModel: AlarmViewModel,
     lifecycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
@@ -34,9 +35,17 @@ class AlarmAdapter(
     private var isSelected = false
     private var allSelected = false
 
-    fun select(delete: Boolean) {
-        allSelected = delete
-        notifyDataSetChanged();
+    private var isAllChecked = false
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun checkAll() {
+        // Đảo ngược giá trị của biến isAllChecked
+        isAllChecked = !isAllChecked
+        // Gán giá trị của biến isAllChecked cho item.isChecked của mỗi item
+        for (alarm in alarmList) {
+            alarm.isChecked = isAllChecked
+        }
+        notifyDataSetChanged()
     }
 
     // ViewHolder chứa các view cần thiết
@@ -71,10 +80,9 @@ class AlarmAdapter(
     // Gán dữ liệu cho các view trong ViewHolder
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
         val alarm = alarmList[position]
-        Log.v("cakcka", "${alarm.id}, ${alarm.isEnable}")
         holder.alarmTimeTxt.text = alarm.time
         holder.enableAlarmBtn.isChecked = alarm.isEnable
-        holder.checkDeleteBtn.isChecked = alarm.deleteCheck
+        holder.checkDeleteBtn.isChecked = alarm.isChecked
 
         setupViews(holder)
         setupListeners(holder, alarm)
@@ -84,16 +92,16 @@ class AlarmAdapter(
         return alarmList.size
     }
 
-    private fun getCheckDeleteAlarm(): Int {
-        var countDelete = 0
-        for (alarm in alarmList) {
-            if (alarm.deleteCheck) {
-                countDelete++
-            }
-        }
+//    private fun getCheckDeleteAlarm(): Int {
+//        var countDelete = 0
+//        for (alarm in alarmList) {
+//            if (alarm.isChecked) {
+//                countDelete++
+//            }
+//        }
 
-        return countDelete
-    }
+//        return countDelete
+//    }
 
     // Set up views
     private fun setupViews(holder: AlarmViewHolder) {
@@ -120,6 +128,8 @@ class AlarmAdapter(
             holder.alarmLayout.setOnClickListener {
                 onItemClickLister(alarm)
             }
+
+            selectedAlarms.clear()
         }
 
         holder.alarmLayout.setOnLongClickListener {
@@ -135,9 +145,30 @@ class AlarmAdapter(
         // su kien xay ra khi nut check box thay doi
         holder.checkDeleteBtn.setOnCheckedChangeListener { _, isChecked ->
 
+            isSelected = true
+            if (selectedAlarms.contains(alarm)) {
+                selectedAlarms.remove(alarm)
+                holder.checkDeleteBtn.isChecked = false
+            } else {
+                selectedAlarms.add(alarm)
+                holder.checkDeleteBtn.isChecked = true
+            }
+
+            if (selectedAlarms.size == 0) isSelected = false
+
             onCheckBoxCheckedChangeListener(alarm, isChecked)
             holder.checkDeleteBtn.post { notifyDataSetChanged() }
         }
+
+//        holder.checkDeleteBtn.setOnClickListener {
+//            alarm.isChecked = holder.checkDeleteBtn.isChecked
+//            alarmViewModel.updateAlarm(alarm)
+//
+//            isAllChecked = alarmList.all { it.isChecked }
+//        }
+
+
+
 
 //        if (actFragViewModel.checkAll.value == true) {
 //            holder.setCheckDeleteBtn(true)
@@ -180,5 +211,20 @@ class AlarmAdapter(
 //            actFragViewModel.setCheckAll(selectedAlarms.size)
 //            onCheckBoxCheckedChangeListener(selectedAlarms)
 //        }
+
+        if (actFragViewModel.checkAll.value == Constants.CHECK_DELETE_ON_CLICK) {
+            val alarmSet = alarmList.toSet()
+            val selectedAlarmSet = selectedAlarms.toMutableSet()
+
+            if (alarmSet == selectedAlarmSet) {
+                selectedAlarms.clear()
+            } else {
+                selectedAlarmSet.addAll(alarmList)
+                selectedAlarms = selectedAlarmSet.toMutableList()
+            }
+
+            actFragViewModel.setCheckAll(selectedAlarms.size)
+            onCheckBoxCheckedChangeListener(selectedAlarms)
+        }
     }
 }
