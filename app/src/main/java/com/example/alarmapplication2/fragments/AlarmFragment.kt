@@ -1,4 +1,4 @@
-package com.example.alarmapplication2.fragment
+package com.example.alarmapplication2.fragments
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -16,13 +16,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.alarmapplication2.adapter.AlarmAdapter
+import com.example.alarmapplication2.adapters.AlarmAdapter
 import com.example.alarmapplication2.databinding.FragmentAlarmBinding
-import com.example.alarmapplication2.domain.Alarm
+import com.example.alarmapplication2.models.Alarm
 import com.example.alarmapplication2.receiver.AlarmReceiver
 import com.example.alarmapplication2.receiver.Constants
-import com.example.alarmapplication2.viewmodel.ActFragViewModel
-import com.example.alarmapplication2.viewmodel.AlarmViewModel
+import com.example.alarmapplication2.viewmodels.AlarmViewModel
+import com.example.alarmapplication2.viewmodels.AppViewModel
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.util.Calendar
@@ -45,14 +45,14 @@ class AlarmFragment : Fragment() {
     }
 
     // ViewModel for managing the activity and fragment states
-    private val actFragViewModel: ActFragViewModel by lazy {
-        ViewModelProvider(requireActivity())[ActFragViewModel::class.java]
+    private val appViewModel: AppViewModel by lazy {
+        ViewModelProvider(requireActivity())[AppViewModel::class.java]
     }
 
     // Inflates the fragment's view and initializes the alarm list
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAlarmBinding.inflate(inflater, container, false)
 
@@ -72,7 +72,7 @@ class AlarmFragment : Fragment() {
             }
         }
 
-        actFragViewModel.deleteLayoutOn.observe(requireActivity()) {
+        appViewModel.deleteLayoutOn.observe(requireActivity()) {
             if (it) {
                 binding.addAlarmBtn.visibility = View.GONE
                 binding.bottomDelete.visibility = View.VISIBLE
@@ -96,23 +96,16 @@ class AlarmFragment : Fragment() {
         val adapter = AlarmAdapter(
             onItemClickLister = { alarm -> updateAlarm(alarm) },
             onItemLongClickListener = {
-                actFragViewModel.setDeleteLayoutOn(true)
                 deleteAlarm()
             },
             onSwitchCheckedChangeListener = { alarm, isChecked ->
-                alarm.isEnable = isChecked
-                alarmViewModel.updateAlarm(alarm)
-                if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isChecked) {
+                if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     setAlarm(alarm)
                 } else {
                     cancelAlarm(alarm)
                 }
             },
-            onCheckBoxCheckedChangeListener = { alarm, isChecked ->
-                alarm.isChecked = isChecked
-                alarmViewModel.updateAlarm(alarm)
-            },
-            actFragViewModel,
+            appViewModel,
             alarmViewModel,
             requireActivity()
         )
@@ -121,7 +114,11 @@ class AlarmFragment : Fragment() {
             setHasFixedSize(true)
             this.adapter = adapter
             layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
         }
         return adapter
     }
@@ -143,14 +140,41 @@ class AlarmFragment : Fragment() {
             .build()
 
         picker.addOnPositiveButtonClickListener {
-            alarm.time = String.format("%02d", picker.hour) + ":" + String.format(
-                "%02d", picker.minute
-            )
+            alarm.time =
+                String.format("%02d", picker.hour) + ":" + String.format(
+                    "%02d", picker.minute
+                )
 
             alarmViewModel.updateAlarm(alarm)
         }
 
         picker.show(childFragmentManager, Constants.NOTIFICATION_CHANNEL_ID)
+
+//        val hourPicker = NumberPicker(requireActivity()).apply {
+//            minValue = 0
+//            maxValue = 23
+//            value = 12
+//        }
+//
+//        val minutePicker = NumberPicker(requireActivity()).apply {
+//            minValue = 0
+//            maxValue = 59
+//            value = 0
+//        }
+//
+//        AlertDialog.Builder(requireActivity())
+//            .setTitle("Select Alarm Time")
+//            .setView(LinearLayout(requireActivity()).apply {
+//                orientation = LinearLayout.HORIZONTAL
+//                addView(hourPicker)
+//                addView(minutePicker)
+//            })
+//            .setPositiveButton("OK") { _, _ ->
+//                val selectedHour = hourPicker.value
+//                val selectedMinute = minutePicker.value
+//                // Handle selected time
+//            }
+//            .show()
     }
 
     /**
@@ -165,13 +189,11 @@ class AlarmFragment : Fragment() {
 
         binding.deleteBtn.setOnClickListener {
             alarmViewModel.deleteAlarm(true)
-//            alarmInit().checkAll()
-//            actFragViewModel.setCheckAll(false)
 
             binding.addAlarmBtn.visibility = View.VISIBLE
             binding.bottomDelete.visibility = View.GONE
 
-            actFragViewModel.setDeleteLayoutOn(false)
+            appViewModel.setDeleteLayoutOn(false)
         }
     }
 
@@ -198,9 +220,10 @@ class AlarmFragment : Fragment() {
         picker.show(childFragmentManager, Constants.NOTIFICATION_CHANNEL_ID)
 
         picker.addOnPositiveButtonClickListener {
-            val pickerTime = String.format("%02d", picker.hour) + ":" + String.format(
-                "%02d", picker.minute
-            )
+            val pickerTime =
+                String.format("%02d", picker.hour) + ":" + String.format(
+                    "%02d", picker.minute
+                )
 
             calendar = Calendar.getInstance()
             calendar[Calendar.HOUR_OF_DAY] = picker.hour
@@ -216,7 +239,11 @@ class AlarmFragment : Fragment() {
             )
 
             alarmViewModel.insertAlarm(alarm)
-            Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Alarm set successfully",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -232,6 +259,10 @@ class AlarmFragment : Fragment() {
         calendar[Calendar.MINUTE] = tmp[1].toInt()
         calendar[Calendar.SECOND] = 0
         calendar[Calendar.MILLISECOND] = 0
+
+        if (calendar.timeInMillis < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
+        }
 
         alarmManager =
             requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
@@ -264,7 +295,11 @@ class AlarmFragment : Fragment() {
             }
         }
 
-        Toast.makeText(requireActivity(), "Alarm set Succesfully", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            requireActivity(),
+            "Alarm set Succesfully",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     /**
@@ -286,6 +321,7 @@ class AlarmFragment : Fragment() {
         alarmManager.cancel(pendingIntent)
         pendingIntent.cancel()
 
-        Toast.makeText(requireActivity(), "Alarm cancelled", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireActivity(), "Alarm cancelled", Toast.LENGTH_SHORT)
+            .show()
     }
 }

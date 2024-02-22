@@ -4,22 +4,22 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.alarmapplication2.models.StopClock
+import com.example.alarmapplication2.models.CountDownClock
 
-@Database(entities = [StopClock::class], version = 3, exportSchema = false)
-abstract class StopClockDatabase : RoomDatabase() {
-    abstract fun stopClockDAO(): StopClockDAO
+@Database(entities = [CountDownClock::class], version = 1, exportSchema = false)
+abstract class CountDownClockDatabase : RoomDatabase() {
+    abstract fun countDownClockDao(): CountDownClockDAO
 
     companion object {
         @Volatile
-        var INSTANCE: StopClockDatabase? = null
+        var INSTANCE: CountDownClockDatabase? = null
 
-        fun getDatabase(context: Context): StopClockDatabase {
+        fun getDatabase(context: Context): CountDownClockDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context,
-                    StopClockDatabase::class.java,
-                    "stopClock.db"
+                    CountDownClockDatabase::class.java,
+                    "countDownClock.db"
                 )
                     .fallbackToDestructiveMigration()
                     .build()

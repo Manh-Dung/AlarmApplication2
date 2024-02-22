@@ -1,4 +1,4 @@
-package com.example.alarmapplication2.adapter
+package com.example.alarmapplication2.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,15 +7,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alarmapplication2.R
-import com.example.alarmapplication2.domain.Alarm
-import com.example.alarmapplication2.domain.StopClock
+import com.example.alarmapplication2.models.StopClock
 
-class StopClockAdapter : RecyclerView.Adapter<StopClockAdapter.StopClockViewHolder>() {
+class StopClockAdapter :
+    RecyclerView.Adapter<StopClockAdapter.StopClockViewHolder>() {
     private var stopClockList = emptyList<StopClock>()
 
-    class StopClockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val stopClockLayout: LinearLayout = itemView.findViewById(R.id.stopClockLayout)
-        val stopClockIdTxt: TextView = itemView.findViewById(R.id.stopClockIdTxt)
+    class StopClockViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+        val stopClockLayout: LinearLayout =
+            itemView.findViewById(R.id.stopClockLayout)
+        val stopClockIdTxt: TextView =
+            itemView.findViewById(R.id.stopClockIdTxt)
         val preTimeTxt: TextView = itemView.findViewById(R.id.preTimeTxt)
         val stopTimeTxt: TextView = itemView.findViewById(R.id.stopTimeTxt)
     }
@@ -27,10 +30,11 @@ class StopClockAdapter : RecyclerView.Adapter<StopClockAdapter.StopClockViewHold
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): StopClockAdapter.StopClockViewHolder {
         return StopClockAdapter.StopClockViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.stop_clock_row, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.stop_clock_row, parent, false)
         )
     }
 
@@ -40,7 +44,7 @@ class StopClockAdapter : RecyclerView.Adapter<StopClockAdapter.StopClockViewHold
 
     override fun onBindViewHolder(holder: StopClockViewHolder, position: Int) {
         val stopClock = stopClockList[position]
-        holder.stopClockIdTxt.text = stopClock.id.toString()
+        holder.stopClockIdTxt.text = stopClockList.size.minus(position).toString()
         holder.preTimeTxt.text = stopClock.preTime
         holder.stopTimeTxt.text = stopClock.time
     }

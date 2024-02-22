@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.example.alarmapplication2.service.AlarmService
+import com.example.alarmapplication2.services.AlarmService
 import java.util.Timer
 import java.util.TimerTask
 

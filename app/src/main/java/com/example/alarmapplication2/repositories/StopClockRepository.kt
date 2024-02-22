@@ -1,10 +1,8 @@
-package com.example.alarmapplication2.repository
+package com.example.alarmapplication2.repositories
 
 import androidx.lifecycle.LiveData
-import com.example.alarmapplication2.data.AlarmDAO
 import com.example.alarmapplication2.data.StopClockDAO
-import com.example.alarmapplication2.domain.Alarm
-import com.example.alarmapplication2.domain.StopClock
+import com.example.alarmapplication2.models.StopClock
 
 class StopClockRepository(private val stopClockDAO: StopClockDAO) {
 
@@ -16,5 +14,9 @@ class StopClockRepository(private val stopClockDAO: StopClockDAO) {
 
     suspend fun deleteClocks() {
         stopClockDAO.deleteClocks()
+    }
+
+    suspend fun deleteAll() {
+        stopClockDAO.deleteAll()
     }
 }

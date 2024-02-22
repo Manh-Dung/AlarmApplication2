@@ -1,4 +1,4 @@
-package com.example.alarmapplication2.service
+package com.example.alarmapplication2.services
 
 import android.app.PendingIntent
 import android.app.Service

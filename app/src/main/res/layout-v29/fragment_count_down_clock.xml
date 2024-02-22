@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".fragments.CountDownClockFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutNumberPickers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/playCountDownClockBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <NumberPicker
+            android:id="@+id/hour_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:selectionDividerHeight="0dp" />
+
+        <NumberPicker
+            android:id="@+id/minute_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:selectionDividerHeight="0dp" />
+
+        <NumberPicker
+            android:id="@+id/second_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:selectionDividerHeight="0dp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBarCircle"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="270dp"
+            android:layout_height="270dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/drawable_circle_dark_blue"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="100"
+            android:progressDrawable="@drawable/drawable_circle_yellow"
+            android:rotation="-90" />
+
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="00:01:00"
+            android:textColor="@color/blue_icon"
+            android:textSize="40sp" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/playCountDownClockBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:src="@drawable/play_ic"
+        app:backgroundTint="@color/fab"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:maxImageSize="30dp"
+        app:shapeAppearanceOverlay="@style/fab_rounded"
+        app:tint="@color/blue_icon" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/playCountDownClockBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="80dp"
+        android:src="@drawable/list_ic"
+        app:backgroundTint="@color/fab"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="30dp"
+        app:shapeAppearanceOverlay="@style/fab_rounded"
+        app:tint="@color/gray_icon" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/stopCountDownClockBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="70dp"
+        android:backgroundTint="@color/fab"
+        android:src="@drawable/stop_ic"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:maxImageSize="30dp"
+        app:shapeAppearanceOverlay="@style/fab_rounded"
+        app:tint="@color/blue_icon" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pauseCountDownClockBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="70dp"
+        android:backgroundTint="@color/fab"
+        android:src="@drawable/pause_ic"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="30dp"
+        app:shapeAppearanceOverlay="@style/fab_rounded"
+        app:tint="@color/blue_icon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

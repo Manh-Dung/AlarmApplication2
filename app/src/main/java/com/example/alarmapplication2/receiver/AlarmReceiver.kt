@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.alarmapplication2.service.AlarmService
+import com.example.alarmapplication2.services.AlarmService
 
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -112,7 +112,7 @@ object Constants {
         const val STOP_FOREGROUND_ACTION = "STOP_FOREGROUND"
     }
 
-    const val CHECK_DELETE_ON_CLICK = -1
+    const val CHECK_DELETE_ON_CLICK = false
     const val NOTIFICATION_CHANNEL_ID = "alarm_channel"
 }
 

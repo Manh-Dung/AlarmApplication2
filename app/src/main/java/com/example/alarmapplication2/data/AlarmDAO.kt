@@ -7,7 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.alarmapplication2.domain.Alarm
+import com.example.alarmapplication2.models.Alarm
 
 @Dao
 interface AlarmDAO {
@@ -28,4 +28,7 @@ interface AlarmDAO {
 
     @Query("SELECT * FROM Alarm ORDER BY id DESC")
     fun getAllAlarms(): LiveData<MutableList<Alarm>>
+
+    @Query("SELECT COUNT(*) FROM Alarm WHERE isChecked = 1")
+    fun countCheckedAlarms(): LiveData<Int>
 }

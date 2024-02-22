@@ -1,4 +1,4 @@
-package com.example.alarmapplication2.domain
+package com.example.alarmapplication2.models
 
 import android.os.Parcelable
 import androidx.room.Entity
@@ -8,9 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "Alarm")
 data class Alarm(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long? = null,
+    @PrimaryKey(autoGenerate = true) var id: Long? = null,
     var time: String,
     var isEnable: Boolean,
-    var isChecked: Boolean
+    var isChecked: Boolean,
 ) : Parcelable

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".fragment.StopClockFragment">
+    tools:context=".fragments.StopClockFragment">
 
     <TextView
         android:id="@+id/stopClockTxt"
@@ -42,12 +42,12 @@
         android:layout_marginBottom="80dp"
         android:src="@drawable/play_ic"
         app:backgroundTint="@color/fab"
-        app:tint="@color/blue_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/stopClockTxt"
         app:layout_constraintStart_toStartOf="@+id/stopClockTxt"
         app:maxImageSize="30dp"
-        app:shapeAppearanceOverlay="@style/fab_rounded" />
+        app:shapeAppearanceOverlay="@style/fab_rounded"
+        app:tint="@color/blue_icon" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/flagStopClockBtn"
@@ -55,12 +55,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginBottom="70dp"
-        android:backgroundTint="@color/item_bg"
+        android:backgroundTint="@color/fab"
         android:src="@drawable/flag_ic"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:maxImageSize="30dp" />
+        app:maxImageSize="30dp"
+        app:shapeAppearanceOverlay="@style/fab_rounded"
+        app:tint="@color/blue_icon" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pauseStopClockBtn"
@@ -68,12 +70,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="80dp"
         android:layout_marginBottom="70dp"
-        android:backgroundTint="@color/item_bg"
+        android:backgroundTint="@color/fab"
         android:src="@drawable/pause_ic"
+        app:tint="@color/blue_icon"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="30dp" />
-
+        app:maxImageSize="30dp"
+        app:shapeAppearanceOverlay="@style/fab_rounded" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

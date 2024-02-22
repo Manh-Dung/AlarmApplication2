@@ -4,23 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".fragment.CountDownClockFragment">
+    tools:context=".fragments.CountDownClockFragment">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/textTxt"-->
-    <!--        android:textAlignment="center"-->
-    <!--        android:textSize="40sp"-->
-    <!--        android:textColor="@color/white"-->
-    <!--        android:textStyle="bold"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:hint="00:00" />-->
+    <LinearLayout
+        android:id="@+id/linearLayoutNumberPickers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:paddingStart="48dp"
+        android:paddingEnd="48dp">
 
-    <!--    <Button-->
-    <!--        android:layout_gravity="center_horizontal|center_vertical"-->
-    <!--        android:id="@+id/btn"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content" />-->
+        <NumberPicker
+            android:id="@+id/hour_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:showDividers="none"
+            android:value="12" />
+
+        <NumberPicker
+            android:id="@+id/minute_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:showDividers="none"
+            android:value="0" />
+
+        <NumberPicker
+            android:id="@+id/second_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:showDividers="none"
+            android:value="0" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBarCircle"
@@ -31,26 +49,10 @@
         android:background="@drawable/drawable_circle_dark_blue"
         android:indeterminate="false"
         android:max="100"
+        android:visibility="gone"
         android:progress="100"
         android:progressDrawable="@drawable/drawable_circle_yellow"
         android:rotation="-90" />
-
-    <EditText
-        android:id="@+id/editTextMinute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textViewTime"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:hint="Minute"
-        android:inputType="number"
-        android:maxLength="15"
-        android:maxLines="1"
-        android:minEms="5"
-        android:text="1"
-        android:textColor="@color/blue_icon"
-        android:textColorHint="@color/blue_icon" />
 
     <TextView
         android:id="@+id/textViewTime"
@@ -59,6 +61,7 @@
         android:layout_centerInParent="true"
         android:text="00:01:00"
         android:textColor="@color/blue_icon"
+        android:visibility="gone"
         android:textSize="40sp" />
 
     <ImageView
@@ -75,7 +78,7 @@
         android:id="@+id/imageViewStartStop"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/progressBarCircle"
+        android:layout_below="@+id/linearLayoutNumberPickers"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:src="@drawable/start_ic" />

@@ -1,4 +1,4 @@
-package com.example.alarmapplication2.fragment
+package com.example.alarmapplication2.fragments
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,13 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alarmapplication2.R
-import com.example.alarmapplication2.adapter.StopClockAdapter
+import com.example.alarmapplication2.adapters.StopClockAdapter
 import com.example.alarmapplication2.databinding.FragmentStopClockBinding
-import com.example.alarmapplication2.domain.StopClock
-import com.example.alarmapplication2.service.StopClockService
-import com.example.alarmapplication2.viewmodel.StopClockViewModel
+import com.example.alarmapplication2.models.StopClock
+import com.example.alarmapplication2.services.StopClockService
+import com.example.alarmapplication2.viewmodels.StopClockViewModel
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 
@@ -45,12 +44,15 @@ class StopClockFragment : Fragment() {
     // Inflates the fragment's view, initializes the stop clock service and loads the stop clocks
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentStopClockBinding.inflate(inflater, container, false)
 
         serviceIntent = Intent(requireActivity(), StopClockService::class.java)
-        activity?.registerReceiver(updateTime, IntentFilter(StopClockService.TIMER_UPDATED))
+        activity?.registerReceiver(
+            updateTime,
+            IntentFilter(StopClockService.TIMER_UPDATED)
+        )
 
         stopClockLoad(stopClockInit())
 
@@ -78,7 +80,11 @@ class StopClockFragment : Fragment() {
         binding.stopClockRecyclerView.setHasFixedSize(true)
         binding.stopClockRecyclerView.adapter = adapter
         binding.stopClockRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
         return adapter
     }
 
@@ -125,7 +131,7 @@ class StopClockFragment : Fragment() {
             binding.playStopClockBtn.visibility = View.VISIBLE
 
             resetTimer()
-            stopClockViewModel.deleteClock()
+            stopClockViewModel.deleteAll()
             animateViews(200f, 60f)
         } else {
             animateViews(-500f, 40f)
@@ -158,7 +164,8 @@ class StopClockFragment : Fragment() {
     private fun setFlag() {
         val currentTime = getTimeStringFromDouble(time)
 
-        val lastTime = stopClockViewModel.getAllClocks.value?.firstOrNull()?.time
+        val lastTime =
+            stopClockViewModel.getAllClocks.value?.firstOrNull()?.time
 
         val preTime = if (lastTime != null) {
             getTimeDifference(lastTime, currentTime)
@@ -229,17 +236,11 @@ class StopClockFragment : Fragment() {
      */
     private fun getTimeDifference(startTime: String, endTime: String): String {
         val format = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-
-        val d1: Date = format.parse(startTime)
-        val d2: Date = format.parse(endTime)
-
-        val diff = d2.time - d1.time
-
+        val diff = format.parse(endTime).time - format.parse(startTime).time
         val hours = diff / (60 * 60 * 1000) % 24
         val minutes = diff / (60 * 1000) % 60
         val seconds = diff / 1000 % 60
-
-        return makeTimeString(hours.toInt(), minutes.toInt(), seconds.toInt())
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     /**

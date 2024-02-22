@@ -1,4 +1,4 @@
-package com.example.alarmapplication2.fragment
+package com.example.alarmapplication2.fragments
 
 import android.os.Bundle
 import android.os.Handler

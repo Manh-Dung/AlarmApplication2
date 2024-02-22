@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.alarmapplication2.domain.StopClock
+import com.example.alarmapplication2.models.StopClock
 
 @Dao
 interface StopClockDAO {
@@ -17,4 +17,7 @@ interface StopClockDAO {
 
     @Query("SELECT * FROM StopClock ORDER BY id DESC")
     fun getAllClocks(): LiveData<List<StopClock>>
+
+    @Query("DELETE FROM StopClock")
+    suspend fun deleteAll()
 }

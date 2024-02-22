@@ -1,12 +1,12 @@
-package com.example.alarmapplication2.adapter
+package com.example.alarmapplication2.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.alarmapplication2.fragment.AlarmFragment
-import com.example.alarmapplication2.fragment.ClockFragment
-import com.example.alarmapplication2.fragment.CountDownClockFragment
-import com.example.alarmapplication2.fragment.StopClockFragment
+import com.example.alarmapplication2.fragments.AlarmFragment
+import com.example.alarmapplication2.fragments.ClockFragment
+import com.example.alarmapplication2.fragments.CountDownClockFragment
+import com.example.alarmapplication2.fragments.StopClockFragment
 
 class ViewPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     override fun getItemCount(): Int {

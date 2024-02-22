@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".activity.MainActivity">
+    tools:context=".activities.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/deleteSelectLayout"
@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+           <ImageView
             android:id="@+id/closeDeleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
