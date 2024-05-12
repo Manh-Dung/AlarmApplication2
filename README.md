@@ -8,7 +8,13 @@
 ![App Preview](https://via.placeholder.com/468x300?text=App+Preview+Image)
 
 ## 📖 Description
-The Alarm App is a Kotlin-based application that allows users to set and manage alarms with ease. It utilizes the power of modern Android development with MVVM architecture, ensuring a responsive and user-friendly experience.
+The Alarm App is a versatile and user-friendly Kotlin-based application that allows users to manage their time effectively. With a sleek and intuitive interface, users can easily set alarms, view the current time, use a stopwatch, and set timers.
+
+### Key Features:
+- **Set Alarms**: Customize alarm settings with different tunes, volumes, and labels.
+- **Current Time Display**: Always stay on track with a live clock display.
+- **Stopwatch**: Measure time intervals with precision for your activities.
+- **Timer**: Count down to any event or task with a simple and efficient timer.
 
 ## 🛠️ Technologies
 This application is built with the following technologies:
